@@ -1,0 +1,38 @@
+<div class="container-fluid" ng-controller="TagController" ng-init="queryField='all'">
+    <h2>Tagged Videos</h2>
+    <div class="row">
+        <div class="col-lg-6">Search by tag:</div>
+    </div>
+    <div class="row top-buffer">
+        <form class="col-lg-6" ng-submit="getVideosByTags(tags)">
+        <div class="form-group">
+            <div class="col-sm-12">
+                <tags-input ng-model="tags" addOnSpace="true"></tags-input>
+                <input class="btn btn-primary col-sm-2" type="submit" id="submitTags" value="Go!">
+            </div>
+        </div>
+        </form>
+    </div>
+    <div class="row"></div>
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th class="clickable" ng-click="sortBy='title';reverse=!reverse">Title</th>
+            <th class="clickable" ng-click="sortBy='type';reverse=!reverse">Type</th>
+            <th class="clickable" ng-click="sortBy='tags';reverse=!reverse">Tags</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="video in videos | orderBy:releaseYear">
+            <td><a ng-href="#/video/{{ video.videoId }}">{{ video.title }}</a></td>
+            <td>{{ video.type }}</td>
+            <td><span ng-repeat="tag in video.tags"><a ng-href="#/tag/{{ tag }}">{{ tag }}</a>{{$last ? '' : ', '}}</span></td>
+            <td>{{ video.description }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <script src="scripts/killrvideo.js"></script>
+
+</div>

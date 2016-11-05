@@ -1,0 +1,32 @@
+<div class="container-fluid" ng-controller="AuthenticationController">
+    <div class="container-fluid col-md-6">
+        <div class="alert alert-danger" ng-animate="" role="alert" ng-if="ui.errorMessage">{{ ui.errorMessage }}</div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Login</h3>
+            </div>
+            <div class="panel-body" >
+                <form class="form-horizontal" ng-submit="login(username,password)">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="stock_symbol">Username:</label>
+                        <input id="stock_symbol" class="control-input col-sm-4" align="left" type="text" ng-model="username"
+                                   placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="price">Password:</label>
+                            <input id="price" class="control-input col-sm-4" align="left" type="password" ng-model="password"
+                                   placeholder="Password" required/>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-1"></div>
+                        <input class="btn btn-primary col-sm-2" type="submit" id="login" value="Login">
+                        <div class="col-sm-3"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-5 col-offset-sm-1 text-left">Don't have an account? Register <a href="#/register">here</a></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

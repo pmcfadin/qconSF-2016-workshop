@@ -1,0 +1,22 @@
+<div class="container-fluid" ng-controller="LatestVideosController">
+    <h2>Latest Videos</h2>
+    <table class="table table-responsive">
+        <thead>
+        <tr>
+            <th> </th>
+            <th class="clickable" ng-click="sortBy='title';reverse=!reverse">Title</th>
+            <th class="clickable" ng-click="sortBy='releaseDate';reverse=!reverse">Type</th>
+            <th class="clickable" ng-click="sortBy='mpaaRating';reverse=!reverse">Tags</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="video in videos">
+            <td><img ng-hide="video.previewThumbnail == null" ng-src="data:image/jpeg;base64,{{video.previewThumbnail}}" height="100px"/></td>
+            <td><a ng-href="#/video/{{ video.videoId }}">{{ video.title }}</a></td>
+            <td>{{ video.type }}</td>
+            <td><span ng-repeat="tag in video.tags"><a ng-href="#/tag/{{ tag }}">{{ tag }}</a>{{$last ? '' : ', '}}</span></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
