@@ -93,7 +93,7 @@ public class AbstractDSETest {
     }
 
     private static void createSchema(Session session) throws FileNotFoundException {
-        executeCQL(getScannerFromFile("datamodel/cql/create-schema.cql"), session);
+        executeCQL(getScannerFromResource("create-schema.cql"), session);
     }
 
     private static void executeCQL(Scanner statements, Session session) {

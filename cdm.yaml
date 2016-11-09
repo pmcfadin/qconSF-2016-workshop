@@ -1,0 +1,16 @@
+keyspace: killrvideo
+tables:
+    - user
+    - user_session
+    - videos
+    - videos_by_tag
+    - videos_by_user
+    - latest_videos
+    - actors
+    - actors_by_video
+    - ratings_by_video
+    - searches_by_user
+    - searches_by_user_year_month
+    - searches_by_user_bucketed_300
+version: 2.2
+schema: webapp/datamodel/cql/create-schema.cql

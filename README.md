@@ -34,7 +34,7 @@ Participants should have:
   `
 
 4. Install sample data
-  * From the `qconSF-2016-workshop` directory, `bin/cdm install killrvideo`
+  * From the `qconSF-2016-workshop` directory, `bin/cdm install --no-data .`
 
 #### Getting Help
   If you have questions before the workshop, you can use a special Slack channel I have setup on DataStax Academy.
