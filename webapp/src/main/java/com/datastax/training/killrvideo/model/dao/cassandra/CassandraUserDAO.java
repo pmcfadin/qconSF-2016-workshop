@@ -14,31 +14,16 @@ import com.datastax.training.killrvideo.model.dao.UserDAO;
 
 public class CassandraUserDAO extends CassandraDAO implements UserDAO {
 
+    private PreparedStatement addAddressToUserStatement;
+
     public CassandraUserDAO() {
         super();
-
-        Session session = getCassandraSession();
-
-
     }
 
     @Override
     public boolean addUser(User newUser) throws UserAlreadyExistsException {
         Session session = getCassandraSession();
 
-        SimpleStatement statement = new SimpleStatement(
-                "INSERT INTO USER (email, joined, user_id, fname, lname, password, salt) " +
-                        "VALUES (:email,:joined,:user_id,:fname,:lname,:password,:salt) IF NOT EXISTS",
-                newUser.getEmail(), newUser.getJoined(), newUser.getUserId(), newUser.getFirstName(),
-                newUser.getLastName(), newUser.getPassword(), newUser.getSalt());
-
-
-        ResultSet result = session.execute(statement);
-
-        if (!result.wasApplied()) {
-            throw new UserAlreadyExistsException(
-                    "Could not save user with the specified id. A duplicate already exists");
-        }
         return true;
     }
 
@@ -46,27 +31,7 @@ public class CassandraUserDAO extends CassandraDAO implements UserDAO {
     public User getUser(String email) {
         Session session = getCassandraSession();
 
-        ResultSet resultSet = session.execute("SELECT * FROM user WHERE email = '" + email + "'");
-
-        if (resultSet.isExhausted()) {
-            return null;
-        }
-
-        Row row = resultSet.one();
-
-        User newUser = new User();
-        newUser.setEmail(row.getString("email"));
-        newUser.setFirstName(row.getString("fname"));
-        newUser.setLastName(row.getString("lname"));
-        newUser.setJoined(row.get("joined", Date.class));
-        newUser.setPassword(row.getBytes("password"));
-        newUser.setSalt(row.getBytes("salt"));
-        newUser.setUserId(row.getUUID("user_id"));
-
-        newUser.setPhoneNumbers(row.getMap("phone_numbers", String.class, BigDecimal.class));
-
-
-        return newUser;
+        return null;
     }
 
     @Override
