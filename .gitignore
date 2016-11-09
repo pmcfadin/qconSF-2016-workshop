@@ -2,3 +2,6 @@
 .gitignore
 .idea/
 data/
+webapp/target/
+*.iml
+*.class
