@@ -77,43 +77,30 @@ public class CassandraVideoDAO extends AbstractMapperDAO<Video> implements Video
     public boolean addVideo(Video newVideo) throws VideoAlreadyExistsException {
         Session session = getCassandraSession();
 
-        // Need to insert the video into three tables: videos, latest_videos, videos_by_user
         BoundStatement insertToVideos = insertStatement.bind();
-        Insert insertToLatestVideos;
-        Insert insertToVideosByUser;
-        BatchStatement insertVideoBatch = new BatchStatement();
 
-        /* Uses the QueryBuilder to create our insert statements */
-        insertToLatestVideos = QueryBuilder.insertInto("latest_videos");
-        insertToVideosByUser = QueryBuilder.insertInto("videos_by_user");
-
-        // Bucket value extracted from videoId, used for the latest_videos table
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date(UUIDs.unixTimestamp(newVideo.getVideoId())));
-        int bucket = cal.get(Calendar.YEAR)*10000 + (cal.get(Calendar.MONTH)+1)*100 + cal.get(Calendar.DAY_OF_MONTH);
-        insertToLatestVideos.value("video_bucket", bucket);
+        Insert insertToLatestVideos = QueryBuilder.insertInto("latest_videos")
+                .value("video_bucket", currentDate)
+                .value("video_id", newVideo.getVideoId())
+                .value("title", newVideo.getTitle())
+                .value("type", newVideo.getType())
+                .value("tags", newVideo.getTags())
+                .value("preview_thumbnail", newVideo.getPreviewThumbnail());
 
         if (newVideo.hasVideoId()) {
             insertToVideos.setUUID("video_id", newVideo.getVideoId());
-            insertToLatestVideos.value("video_id", newVideo.getVideoId());
-            insertToVideosByUser.value("video_id", newVideo.getVideoId());
         }
 
         if (newVideo.hasUserId()) {
             insertToVideos.setUUID("user_id", newVideo.getUserId());
-            insertToVideosByUser.value("user_id", newVideo.getUserId());
         }
 
         if (newVideo.hasTitle()) {
             insertToVideos.setString("title", newVideo.getTitle());
-            insertToLatestVideos.value("title", newVideo.getTitle());
-            insertToVideosByUser.value("title", newVideo.getTitle());
         }
 
         if (newVideo.hasType()) {
             insertToVideos.setString("type", newVideo.getType());
-            insertToLatestVideos.value("type", newVideo.getType());
-            insertToVideosByUser.value("type", newVideo.getType());
         }
 
         if (newVideo.hasReleaseDate()) {
@@ -138,14 +125,10 @@ public class CassandraVideoDAO extends AbstractMapperDAO<Video> implements Video
 
         if (newVideo.hasTags()) {
             insertToVideos.setSet("tags", newVideo.getTags());
-            insertToLatestVideos.value("tags", newVideo.getTags());
-            insertToVideosByUser.value("tags", newVideo.getTags());
         }
 
         if (newVideo.hasPreviewThumbnail()) {
             insertToVideos.setBytes("preview_thumbnail", newVideo.getPreviewThumbnail());
-            insertToLatestVideos.value("preview_thumbnail", newVideo.getPreviewThumbnail());
-            insertToVideosByUser.value("preview_thumbnail", newVideo.getPreviewThumbnail());
         }
 
         if (newVideo.hasUrl()) {
@@ -154,14 +137,9 @@ public class CassandraVideoDAO extends AbstractMapperDAO<Video> implements Video
 
         insertToVideos.setFloat("avg_rating", newVideo.getAvgRating());
 
-        insertVideoBatch.add(insertToVideos);
-        insertVideoBatch.add(insertToVideosByUser);
-        insertVideoBatch.add(insertToLatestVideos);
-
-        addVideosByTag(newVideo, insertVideoBatch);
-
         // Execute the statement
-        ResultSet result = session.execute(insertVideoBatch);
+        ResultSet result = session.execute(insertToVideos);
+        session.execute(insertToLatestVideos);
 
         return true;
     }
