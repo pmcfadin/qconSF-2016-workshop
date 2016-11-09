@@ -13,33 +13,18 @@ import java.util.*;
 @Table(name = "videos", readConsistency = "LOCAL_ONE", writeConsistency = "LOCAL_QUORUM")
 public class Video {
 
-    @PartitionKey
-    @Column(name = "video_id")
     private UUID videoId;
-
-    @Column(name = "description")
     private String description;
-    @Column(name = "title")
     private String title;
-    @Column(name = "type")
     private String type;
-    @Column(name = "url")
     private String url;
-    @Column(name = "release_date")
     private Date releaseDate;
-    @Column(name = "release_year")
     private int releaseYear;
-    @Column(name = "avg_rating")
     private float avgRating;
-    @Column(name = "mpaa_rating")
     private String mpaaRating;
-    @Column(name = "tags")
     private Set<String> tags;
-    @Column(name = "preview_thumbnail")
     private ByteBuffer previewThumbnail;
-    @Column(name = "genres")
     private Set<String> genres;
-    @Column(name = "user_id")
     private UUID userId;
 
     public String getDescription() {

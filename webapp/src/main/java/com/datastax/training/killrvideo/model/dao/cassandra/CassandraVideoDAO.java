@@ -219,7 +219,7 @@ public class CassandraVideoDAO extends AbstractMapperDAO<Video> implements Video
 
     @Override
     public Video getVideo(UUID video_id) {
-        return mapper.get(video_id);
+        return null;
     }
 
     @Override
