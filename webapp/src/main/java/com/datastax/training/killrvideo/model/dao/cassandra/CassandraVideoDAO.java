@@ -79,14 +79,6 @@ public class CassandraVideoDAO extends AbstractMapperDAO<Video> implements Video
 
         BoundStatement insertToVideos = insertStatement.bind();
 
-        Insert insertToLatestVideos = QueryBuilder.insertInto("latest_videos")
-                .value("video_bucket", currentDate)
-                .value("video_id", newVideo.getVideoId())
-                .value("title", newVideo.getTitle())
-                .value("type", newVideo.getType())
-                .value("tags", newVideo.getTags())
-                .value("preview_thumbnail", newVideo.getPreviewThumbnail());
-
         if (newVideo.hasVideoId()) {
             insertToVideos.setUUID("video_id", newVideo.getVideoId());
         }
@@ -139,7 +131,6 @@ public class CassandraVideoDAO extends AbstractMapperDAO<Video> implements Video
 
         // Execute the statement
         ResultSet result = session.execute(insertToVideos);
-        session.execute(insertToLatestVideos);
 
         return true;
     }
@@ -203,35 +194,6 @@ public class CassandraVideoDAO extends AbstractMapperDAO<Video> implements Video
     @Override
     public Iterable<Video> getLatestVideos() {
         ArrayList<Video> latestVideos = new ArrayList<Video>();
-        int rowLimit = 12;
-
-        // Gets the most latest week's videos, or the first 12, whichever comes first
-        int currentBucket = currentDate;
-        int lastBucket = currentDate - 7;
-
-        while (latestVideos.size() < rowLimit && currentBucket >= lastBucket) {
-            Statement selectLatestVideos = QueryBuilder
-                .select()
-                .from("latest_videos")
-                .where(QueryBuilder.eq("video_bucket", currentBucket))
-                .limit(rowLimit);
-
-            ResultSet rs = getCassandraSession().execute(selectLatestVideos);
-            for (Row row : rs) {
-                if (latestVideos.size() >= 12)
-                    break;
-
-                Video newVideo = new Video();
-                newVideo.setVideoId(row.getUUID("video_id"));
-                newVideo.setTitle(row.getString("title"));
-                newVideo.setType(row.getString("type"));
-                newVideo.setTags(row.getSet("tags", String.class));
-                newVideo.setPreviewThumbnail(row.getBytes("preview_thumbnail"));
-
-                latestVideos.add(newVideo);
-            }
-            currentBucket = currentBucket - 1;
-        }
 
         return latestVideos;
     }
