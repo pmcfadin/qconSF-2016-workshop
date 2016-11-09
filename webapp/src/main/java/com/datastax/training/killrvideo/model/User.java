@@ -22,7 +22,6 @@ public class User {
     private ByteBuffer salt;
     private UUID userId;
     private Map<String, BigDecimal> phoneNumbers;
-    private Map<String, Address> addresses;
 
     public String getEmail() {
         return email;
@@ -78,14 +77,6 @@ public class User {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
-    }
-
-    public Map<String, Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(Map<String, Address> addresses) {
-        this.addresses = addresses;
     }
 
     public Map<String, BigDecimal> getPhoneNumbers() {

@@ -14,22 +14,12 @@ import com.datastax.training.killrvideo.model.dao.UserDAO;
 
 public class CassandraUserDAO extends CassandraDAO implements UserDAO {
 
-    private UserType addressType;
-    private PreparedStatement addAddressToUserStatement;
-
     public CassandraUserDAO() {
         super();
 
         Session session = getCassandraSession();
 
-        addressType = session.getCluster()
-                .getMetadata()
-                .getKeyspace(getCassandraSession()
-                        .getLoggedKeyspace())
-                .getUserType("address");
 
-        addAddressToUserStatement = session
-                .prepare("UPDATE user set addresses[:addressName] = :address WHERE " + "email = :email");
     }
 
     @Override
@@ -75,13 +65,6 @@ public class CassandraUserDAO extends CassandraDAO implements UserDAO {
 
         newUser.setPhoneNumbers(row.getMap("phone_numbers", String.class, BigDecimal.class));
 
-        Map<String, UDTValue> uDTAddresses = row.getMap("addresses", String.class, UDTValue.class);
-        Map<String, Address> addresses = new HashMap<>(uDTAddresses.size());
-
-        for (Map.Entry<String, UDTValue> entry : uDTAddresses.entrySet())
-            addresses.put(entry.getKey(), UDTToAddress(entry.getValue()));
-
-        newUser.setAddresses(addresses);
 
         return newUser;
     }
@@ -90,13 +73,7 @@ public class CassandraUserDAO extends CassandraDAO implements UserDAO {
     public boolean addAddressToUser(String email, String addressName, Address newAddress) {
         Session session = getCassandraSession();
 
-        BoundStatement boundStatement =
-                addAddressToUserStatement.bind()
-                        .setString("email", email)
-                        .setString("addressName", addressName)
-                        .setUDTValue("address", addressToUDT(newAddress));
 
-        session.execute(boundStatement);
         return true;
     }
 
@@ -105,23 +82,13 @@ public class CassandraUserDAO extends CassandraDAO implements UserDAO {
             return null;
         }
 
-        return addressType.newValue()
-                .setString("street", address.getStreet())
-                .setString("city", address.getCity())
-                .setString("country", address.getCountry())
-                .setString("postalcode", address.getPostalCode());
+
+        return null;
     }
 
     public Address UDTToAddress(UDTValue udtValue) {
 
-        Address newAddress = new Address();
-
-        newAddress.setCity(udtValue.getString("city"));
-        newAddress.setCountry(udtValue.getString("country"));
-        newAddress.setStreet(udtValue.getString("street"));
-        newAddress.setPostalCode(udtValue.getString("postalCode"));
-
-        return newAddress;
+        return null;
     }
 
     @Override
