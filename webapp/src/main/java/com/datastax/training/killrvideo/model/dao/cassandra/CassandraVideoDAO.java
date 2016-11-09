@@ -77,61 +77,6 @@ public class CassandraVideoDAO extends AbstractMapperDAO<Video> implements Video
     public boolean addVideo(Video newVideo) throws VideoAlreadyExistsException {
         Session session = getCassandraSession();
 
-        BoundStatement insertToVideos = insertStatement.bind();
-
-        if (newVideo.hasVideoId()) {
-            insertToVideos.setUUID("video_id", newVideo.getVideoId());
-        }
-
-        if (newVideo.hasUserId()) {
-            insertToVideos.setUUID("user_id", newVideo.getUserId());
-        }
-
-        if (newVideo.hasTitle()) {
-            insertToVideos.setString("title", newVideo.getTitle());
-        }
-
-        if (newVideo.hasType()) {
-            insertToVideos.setString("type", newVideo.getType());
-        }
-
-        if (newVideo.hasReleaseDate()) {
-            insertToVideos.setTimestamp("release_date", newVideo.getReleaseDate());
-        }
-
-        if (newVideo.hasReleaseYear()) {
-            insertToVideos.setInt("release_year", newVideo.getReleaseYear());
-        }
-
-        if (newVideo.hasDescription()) {
-            insertToVideos.setString("description", newVideo.getDescription());
-        }
-
-        if (newVideo.hasMpaaRating()) {
-            insertToVideos.setString("mpaa_rating", newVideo.getMpaaRating());
-        }
-
-        if (newVideo.hasGenres()) {
-            insertToVideos.setSet("genres", newVideo.getGenres());
-        }
-
-        if (newVideo.hasTags()) {
-            insertToVideos.setSet("tags", newVideo.getTags());
-        }
-
-        if (newVideo.hasPreviewThumbnail()) {
-            insertToVideos.setBytes("preview_thumbnail", newVideo.getPreviewThumbnail());
-        }
-
-        if (newVideo.hasUrl()) {
-            insertToVideos.setString("url", newVideo.getUrl());
-        }
-
-        insertToVideos.setFloat("avg_rating", newVideo.getAvgRating());
-
-        // Execute the statement
-        ResultSet result = session.execute(insertToVideos);
-
         return true;
     }
 
