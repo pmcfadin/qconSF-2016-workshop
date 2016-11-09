@@ -41,7 +41,7 @@ Participants should have:
 4. Install sample data
   * From the `qconSF-2016-workshop` directory, `bin/cdm install --no-data .`
 
-  Check the schema using the CQLSH command line tool, `docker exec -it killrvideo cqlsh` Once at the command line, use the `desc keyspaces` command to verify that the killrvideo schema is in place. 
+  Check the schema using the CQLSH command line tool, `docker exec -it killrvideo cqlsh` Once at the command line, use the `desc keyspaces` command to verify that the killrvideo schema is in place.
 
 #### Getting Help
   If you have questions before the workshop, you can use a special Slack channel I have setup on DataStax Academy.
