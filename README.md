@@ -33,8 +33,15 @@ Participants should have:
   docker run -d -p 9042:9042 --name "killrvideo" -v $PWD/data:/var/lib/cassandra killrvideo/killrvideo-dse:1.0.0
   `
 
+  User `docker logs killrvideo` to watch for the startup line: `Starting listening for CQL clients on /0.0.0.0:9042` Once you
+
+  Once started you can verify the status of the node by `docker exec -it killrvideo dsetool status` Look for the "Up" under status.
+
+
 4. Install sample data
   * From the `qconSF-2016-workshop` directory, `bin/cdm install --no-data .`
+
+  Check the schema using the CQLSH command line tool, `docker exec -it killrvideo cqlsh` Once at the command line, use the `desc keyspaces` command to verify that the killrvideo schema is in place. 
 
 #### Getting Help
   If you have questions before the workshop, you can use a special Slack channel I have setup on DataStax Academy.
