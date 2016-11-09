@@ -1,3 +1,4 @@
+-- noinspection SqlNoDataSourceInspectionForFile
 # This data is used for SearchServiceTest and CoreUtilTest. The Tests themselves run this data through methods. This can alternatively be run through cqlsh as well.
 
 CREATE KEYSPACE IF NOT EXISTS killrvideo_test WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1'}  AND durable_writes = true;

@@ -1,2 +1,2 @@
 CREATE KEYSPACE killrvideo_test
-    WITH replication = {'class':'NetworkTopologyStrategy', 'Cassandra':'1'};
+    WITH replication = {'class':'SimpleStrategy', 'replication_factor':'1'};
