@@ -1,0 +1,2297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta content="text/html; charset=" http-equiv="Content-Type" />
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+<meta content="Asciidoctor 1.5.3" name="generator" />
+<title>Data Processing and Data Analytics with Apache Spark&#8482;</title>
+<link href="deck.js/themes/style/font.css" rel="stylesheet" />
+<style>
+.conum { display: inline-block; color: white !important; background-color: #222222; -webkit-border-radius: 100px; border-radius: 100px; text-align: center; width: 1.2em; height: 1.2em; font-size: 0.9em; font-weight: bold; line-height: 1.2; font-family: Arial, sans-serif; font-style: normal; position: relative; top: -0.1em; }
+.conum * { color: white !important; }
+.conum + b { display: none; }
+.conum:after { content: attr(data-value); }
+.conum:not([data-value]):empty { display: none; }
+.colist table td:first-of-type { padding-right: 0.25em; }
+</style>
+<style>
+/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top;line-height:1.45}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
+<link href="deck.js/core/deck.core.css" rel="stylesheet" />
+<link href="deck.js/extensions/scale/deck.scale.css" media="screen" rel="stylesheet" />
+<link href="deck.js/extensions/goto/deck.goto.css" media="screen" rel="stylesheet" />
+<link href="deck.js/themes/style/datastax.css" media="screen" rel="stylesheet" />
+<link href="deck.js/themes/transition/fade.css" media="screen" rel="stylesheet" />
+<link href="deck.js/core/print.css" media="print" rel="stylesheet" />
+<script src="deck.js/modernizr.custom.js"></script>
+</head>
+<body class="article">
+<div class="deck-container">
+<section class="slide" id="title-slide">
+<h1>Data Processing and Data Analytics with Apache Spark&#8482;</h1>
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-data-analytics">
+<h2>Data Analytics</h2>
+<div class="paragraph"><p><em><strong>Definition</strong></em></p></div>
+<div class="verseblock">
+<pre class="content">Science and craft of building applications from data analysis steps to
+discover useful information and support data-driven decision making</pre>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="paragraph"><p><em><strong>Use cases</strong></em></p></div>
+<div class="ulist">
+<ul>
+<li>Recommendations</li>
+<li>Fraud detection</li>
+<li>Social networks and Web link analysis</li>
+<li>Marketing and advertising decisions</li>
+<li>Customer 360</li>
+<li>Sales and stock market analytics</li>
+<li>IoT analytics</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Data analytics is a big and complex field, affecting all areas of our life.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="analysis-steps">
+<h2>Analysis Steps</h2>
+<div class="ulist">
+<ul>
+<li>Statistical analysis</li>
+<li>Classification</li>
+<li>Clustering</li>
+<li>Regression</li>
+<li>Similarity matching</li>
+<li>Collaborative filtering</li>
+<li>Profiling</li>
+<li>Dimensionality reduction</li>
+<li>Feature extraction</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Analytical applications or analysis workflows are typically composed of many analysis steps.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="analytical-application-lifecycle">
+<h2>Analytical Application Lifecycle</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="design" src="images/courses/DS420/components/sections/spark/data-analytics/design.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>This illustration shows CRISP-DM&#8201;&#8212;&#8201;Cross Industry Standard Process for Data Mining.</p></div>
+<div class="paragraph"><p>There is a related standard called SEMMA&#8201;&#8212;&#8201;Sample, Explore, Modify, Model,	Assess.
+SEMMA is similar to CRISP-DM but does not cover <em>Business understanding</em>
+and <em>Deployment</em>.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="the-roles-of-cassandra-and-spark">
+<h2>The Roles of Cassandra and Spark</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="design2" src="images/courses/DS420/components/sections/spark/data-analytics/design2.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Cassandra stores huge amounts of data.</p></div>
+<div class="paragraph"><p>Spark is a computation engine:</p></div>
+<div class="ulist">
+<ul>
+<li><p>
+<em>Data preparation</em>:<div class="ulist">
+<ul>
+<li>Sanitize, normalize, and scale data</li>
+<li>Convert data to a more suitable format</li>
+<li>Integrate data from multiple sources</li>
+</ul>
+</div></p></li>
+<li><p>
+<em>Modeling</em>:<div class="ulist">
+<ul>
+<li>(Mathematical) predictive, causal, descriptive models</li>
+<li>Machine learning</li>
+<li>Data mining</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide" id="cassandra">
+<h2>Cassandra</h2>
+<div class="paragraph"><p><strong>Distributed transactional database designed for big data and high availability</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Millions transactions per second</li>
+<li>1000-node cluster scalability</li>
+<li>Millisecond response time and linear scalability</li>
+<li>Extremely high availability and partition tolerance</li>
+<li>Seamless multi data center support</li>
+</ul>
+</div>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="cassandra" src="images/courses/DS420/components/sections/spark/data-analytics/cassandra.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Cassandra is a perfect fit for the job!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="spark">
+<h2>Spark</h2>
+<div class="paragraph"><p><strong>Distributed computation engine designed for big data and in-memory processing</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Interactive and batch analytics</li>
+<li>Up to 100x faster than Hadoop</li>
+<li>5-10x less code than Hadoop</li>
+<li>Efficiency and scalability</li>
+<li>Fault-tolerance</li>
+</ul>
+</div>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="spark" src="images/courses/DS420/components/sections/spark/data-analytics/spark.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Spark is a perfect fit for the job!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="datastax-enterprise">
+<h2>DataStax Enterprise</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="dse" src="images/courses/DS420/components/sections/spark/data-analytics/dse.png" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>This is the ultimate solution for your enterprise!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-architecture">
+<h2>Spark Architecture</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="spark" src="images/courses/DS420/components/sections/spark/architecture/spark.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>Master-worker architecture</li>
+<li>Master (aka cluster manager) manages Workers and their resources</li>
+<li>Workers instantiate Executors and give them resources (cores and memory)</li>
+<li>Driver schedules computation directly with Executors</li>
+<li><p>
+Failure tolerance<div class="ulist">
+<ul>
+<li>Worker/Executor - no problem; computation is picked up by remaining Workers/Executors</li>
+<li>Master - new Master is elected (DSE feature); running applications are not affected; new applications
+are only affected temporarily until new Master is started</li>
+</ul>
+</div></p></li>
+<li><p>
+Notes:<div class="ulist">
+<ul>
+<li>DSE Spark cluster manager is standalone (open-source Spark also supports Apache Mesos and Hadoop YARN)</li>
+<li>If Driver requests more resources than a cluster can supply, Master will respond with "not enough resources"</li>
+<li>Master, Worker, Executor are all separate JVMs</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide" id="spark-computation-dag-jobs-stages-and-tasks">
+<h2>Spark Computation: DAG, Jobs, Stages, and Tasks</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="computation" src="images/courses/DS420/components/sections/spark/architecture/computation.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>DAG stands for Directed Acyclic Graph of Operations</li>
+<li>DAG is divided into Jobs (Job per action)</li>
+<li>Job is divided into Stages (a shuffling operation or action delimits a Stage)</li>
+<li>Stages have identical Tasks (Task per RDD partition)</li>
+<li>Tasks are executed by Executors in parallel</li>
+<li>Executors hold input and output RDD partitions in cache (and sometimes on disk)</li>
+<li>Intermediate results are never transferred to Driver but <em>SparkContext</em> knows about
+their locations to schedule subsequent computation</li>
+<li>Note:  Stages 3 and 4 will be skipped if the results of Stages 0 and 1 are cached</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide" id="cassandra-architecture">
+<h2>Cassandra Architecture</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="cassandra" src="images/courses/DS420/components/sections/spark/architecture/cassandra.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>This is a quick review of what you already know about Cassandra:</p></div>
+<div class="ulist">
+<ul>
+<li>Peer-to-peer architecture</li>
+<li>Failure tolerance/availability</li>
+<li>Cassandra token ring</li>
+<li>Data structures (table)</li>
+<li>Data distribution (partition key)</li>
+<li>Data replication (replication factor)</li>
+<li>Data consistency (consistency level)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide" id="dse-integration-of-spark-and-cassandra">
+<h2>DSE Integration of Spark and Cassandra</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="integration" src="images/courses/DS420/components/sections/spark/architecture/integration.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>Each physical node runs both Cassandra and Spark JVMs to achieve the best data locality</li>
+<li><em>Spark-Cassandra Connector</em> enables communication between Spark and Cassandra components</li>
+<li><em>Spark-Cassandra Connector</em> is a library for (primarily) retrieving data from and storying data into Cassandra</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide" id="multi-data-center-deployment">
+<h2>Multi Data Center Deployment</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="deployment" src="images/courses/DS420/components/sections/spark/architecture/deployment.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>In production, it is very important to separate transactional and analytical workloads into two or more data centers.</p></div>
+<div class="ulist">
+<ul>
+<li><em>DC Operations</em> (Cassandra only): fast real-time transactions</li>
+<li><em>DC Analytics</em> (Cassandra + Spark): batch and near-real-time, interactive jobs</li>
+</ul>
+</div>
+<div class="paragraph"><p><em>DC Operations</em> collects data and serves real-time applications. Data is typically replicated to <em>DC Analytics</em> automatically.</p></div>
+<div class="paragraph"><p><em>DC Analytics</em> uses Spark to retrieve data from Cassandra, run expensive analysis, and store results back to Cassandra.
+Results may or may not be replicated back to <em>DC Operations</em>, depending on application
+requirements (readily controlled by replication strategy settings for a keyspace).</p></div>
+<div class="paragraph"><p>There can be, of course, multiple operational and analytical data centers.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-spark-shell">
+<h2>Spark Shell</h2>
+<div class="paragraph"><p><strong>Interactive Scala-REPL-based Spark client</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Interpreter for Scala and Spark Scala API</li>
+<li><p>
+Interpreter-aware, predefined objects<div class="ulist">
+<ul>
+<li><em>SparkContext</em>&#8201;&#8212;&#8201;<em>sc</em></li>
+<li><em>HiveContext</em>&#8201;&#8212;&#8201;<em>sqlContext</em></li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Scala REPL = Scala Read-Eval-Print-Loop, which is also known as interpreter.</p></div>
+<div class="paragraph"><p>We will use Spark Shell most of the time to demonstrate various
+Spark Scala API calls.</p></div>
+<div class="paragraph"><p>There are also Python and R interactive clients called <em>pyspark</em> and <em>sparkR</em>, respectively.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="starting-dse-spark-shell">
+<h2>Starting DSE Spark Shell</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>$ dse spark
+
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 1.x.x
+      /_/
+
+Using Scala version 2.x.x
+
+Type in expressions to have them evaluated.
+Type :help for more information.
+
+scala&gt;</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Command <em>dse spark</em> starts the DSE variant of Spark Shell.
+In open-source Spark, the command is <em>spark-shell</em>.</p></div>
+<div class="paragraph"><p>This is a sample output with some lines omitted.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="examples-of-entering-expressions">
+<h2>Examples of Entering Expressions</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>scala&gt; println("Hello Spark!")
+Hello Spark!
+
+scala&gt; val four = 2 + 2
+four: Int = 4
+
+scala&gt; val numbers = sc.parallelize(List(1,2,3,4,5,6,7,8,9))
+numbers: org.apache.spark.rdd.RDD[Int] = ParallelCollectionRDD[8] at parallelize at &lt;console&gt;:55
+
+scala&gt; val movies = sc.cassandraTable("killr_video","movies")
+movies: com.datastax.spark.connector.rdd.CassandraTableScanRDD[com.datastax.spark.connector.CassandraRow] ...</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>The first two expressions are pure Scala. The last two use <em>sc</em> and Spark Scala API.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="auto-completion-and-copy-pasting">
+<h2>Auto-Completion and Copy-Pasting</h2>
+<div class="listingblock">
+<div class="title"><em>Auto-Completion</em></div>
+<div class="content">
+<pre class="CodeRay"><code>scala&gt; sc.&lt;Tab&gt;
+accumulable                accumulableCollection      accumulator                ...
+appName                    applicationId              asInstanceOf               ...
+...                        ...                        ...                        ...</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="title"><em>Copy-Pasting Multi-Line Expressions</em></div>
+<div class="content">
+<pre class="CodeRay"><code>scala&gt; :paste
+// Entering paste mode (ctrl-D to finish)
+
+sc.parallelize(List(1,2,3,4,5,6,7,8,9))
+  .reduce(_+_)
+
+// Exiting paste mode, now interpreting.
+
+res11: Int = 45</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>&lt;Tab&gt; is used for auto-complete. If you write code in an editor to copy-paste later, do not use tabulation!</p></div>
+<div class="paragraph"><p>The <em>:paste</em> mode must be used with multi-line expressions. Otherwise, Spark Shell will interpret each line as
+a separate expression.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-spark-web-ui">
+<h2>Spark Web UI</h2>
+<div class="paragraph"><p><strong>Monitoring your cluster and applications</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:14%" />
+<col style="width:28%" />
+<col style="width:57%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">UI</th>
+<th class="tableblock halign-left valign-top">URL</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Master Web UI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a class="bare" href="http://&lt;master-host&gt;:7080">http://&lt;master-host&gt;:7080</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Displays information about Master, Workers, and running and completed applications.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Application Web UI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a class="bare" href="http://&lt;driver-host&gt;:4040">http://&lt;driver-host&gt;:4040</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Displays information about running and completed jobs, stages, tasks, as well as
+information about persisted datasets, environment settings, and Executors that are controlled by an application.
+If more than one application is running, the Web UI ports are assigned as <code>4040</code>, <code>4041</code>, and so forth.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>The Spark Web UI is extremely useful when designing, debugging, troubleshooting, optimizing, executing, and monitoring
+your cluster and applications.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="master-web-ui">
+<h2>Master Web UI</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="master ui" src="images/courses/DS420/components/sections/spark/spark-web-ui/master-ui.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Notice the Master URL.</p></div>
+<div class="paragraph"><p>Here we have a 3-node cluster and one running application that takes a half of the available resources.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="application-web-ui">
+<h2>Application Web UI</h2>
+<div class="imageblock" style="float: center">
+<div class="content">
+<img alt="application ui" src="images/courses/DS420/components/sections/spark/spark-web-ui/application-ui.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Only one tab is shown. Hopefully you are already familiar with Stages and Tasks.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-rdd">
+<h2>What is an RDD?</h2>
+<div class="paragraph"><p><strong>Programming abstraction of a dataset for Spark in-memory computation</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:25%" />
+<col style="width:75%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dataset</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dataset contains primitive values, records, tuples, class objects</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Distributed</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Data may reside on different nodes in a cluster</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Resilient</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Data is recomputed based on lineage in case of a failure</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Immutable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dataset is transformed into a new dataset rather than mutated</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In-memory</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Data is kept in memory as much as possible</p></td>
+</tr>
+</tbody>
+</table>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Resilient Distributed Dataset or RDD is a programming abstraction of a dataset
+for Spark in-memory computation. RDD has a number of properties that
+we will discuss in more detail in the following slides.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="rdd-as-a-dataset">
+<h2>RDD as a Dataset</h2>
+<div class="ulist">
+<ul>
+<li>Collection of data objects</li>
+<li>Object types can affect operations</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="dataset" src="images/courses/DS420/components/sections/spark/rdd/dataset.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>First, think of RDD as a dataset or a collection of data objects of a known type.
+Types of objects can affect operations that are applicable to a particular RDD.
+For example, the RDD in the illustration holds key-value pairs,
+where keys correspond to people names
+and values correspond to people ages, such as Alice is 21 y.o.
+Key-Value Pair RDDs constitute a special class of RDDs with many useful and unique operations.</p></div>
+<div class="paragraph"><p>It is important to understand that until computation is triggered by an action,
+an RDD does not hold any data; it is instead just a recipe of how data objects
+can be computed.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="rdd-as-a-distributed-dataset">
+<h2>RDD as a Distributed Dataset</h2>
+<div class="ulist">
+<ul>
+<li>RDD is divided into <em>partitions</em></li>
+<li>Partitions are distributed across nodes in a cluster</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="partitions" src="images/courses/DS420/components/sections/spark/rdd/partitions.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Second, Spark automatically partitions an RDD into smaller collections called <em>partitions</em>
+and distributes them among <em>Executors</em> on different nodes in a cluster.</p></div>
+<div class="paragraph"><p>In our example, we have four partitions distributed across the three nodes.</p></div>
+<div class="paragraph"><p>How partitioning is performed may depend on many factors,
+including a data source, such as Cassandra or HDFS,
+number of cores available to an application, and types of operations applied to an RDD.
+An application will frequently have to control partitioning
+to achieve optimal performance.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="rdd-as-a-resilient-distributed-dataset">
+<h2>RDD as a Resilient Distributed Dataset</h2>
+<div class="ulist">
+<ul>
+<li>Spark remembers lineage of all data it computes to achieve fault-tolerance</li>
+<li>Spark automatically recomputes partitions that were lost due to a failure</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="failure" src="images/courses/DS420/components/sections/spark/rdd/failure.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Third, RDD is resilient or fault-tolerant because Spark remembers lineage or pedigree
+of all data it computes. In case of a node or process failure, lost partitions
+are recomputed automatically.</p></div>
+<div class="paragraph"><p>This process is illustrated in our example, where the node with two partitions failed
+and Spark recomputed those partitions on the two other nodes.
+Reliability of an external data source is important for result reproducibility.
+Spark should be able to retrieve data again if need be!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="rdd-is-immutable">
+<h2>RDD is Immutable</h2>
+<div class="ulist">
+<ul>
+<li>RDD is read-only</li>
+<li>RDD can be transformed</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="immutable" src="images/courses/DS420/components/sections/spark/rdd/immutable.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Next, the RDD property that is frequently overlooked is immutability.</p></div>
+<div class="paragraph"><p>It is helpful to think about RDD data as read-only. To change data, we must transform
+an RDD into a new RDD.</p></div>
+<div class="paragraph"><p>In this example, we are applying the <em>filer</em> transformation on the input RDD to
+produce the output RDD with key-value pairs where value (person&#8217;s age) is greater
+or equal to 21.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="rdd-is-for-in-memory-computation">
+<h2>RDD is for In-Memory Computation</h2>
+<div class="ulist">
+<ul>
+<li>RDD partitions are processed in memory</li>
+<li>RDD (as a whole) does not have to fit into memory</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="in memory" src="images/courses/DS420/components/sections/spark/rdd/in-memory.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Finally, Spark is about parallel, in-memory computation.
+Partitions do have to be in memory to be processed, however an RDD as a whole
+does not need to be in memory at one given moment.</p></div>
+<div class="paragraph"><p>Conceptually, imagine that computation is organized into multiple pipelines
+with a known throughput, such that each pipeline can handle some number of partitions
+at a time. The data that is waiting for its turn to get into a pipeline is simply sitting
+at the data source. Once a pipeline is cleared and its output is to an external system,
+it is capable to serve more partitions.
+The more cluster resources are allocated to your application,
+the more pipelines and parallelism you can have.</p></div>
+<div class="paragraph"><p>It should be noted that some operations on RDDs,
+such as those that involve data shuffling, require disk I/O.
+In addition, an application will frequently have to control how an RDD is cached or persisted
+to achieve optimal performance.</p></div>
+</div>
+</div>
+</section>
+<section class="slide transition-purple" id="courses-DS420-components-exercises-spark-loading-data">
+<h2>Exercise: Loading Data into a Cassandra Database Using Spark</h2>
+
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-rdd-persistence">
+<h2>The Challenge: Suboptimal Code</h2>
+<div class="paragraph"><p><strong>Computing percentages of comedy movies released in 2014 and 2013</strong></p></div>
+<div class="imageblock right" style="float: right">
+<div class="content">
+<img alt="movies" src="images/courses/DS420/components/sections/spark/rdd-persistence/movies.svg" />
+</div>
+</div>
+<div class="listingblock left">
+<div class="content">
+<pre class="CodeRay"><code>val movies = sc.cassandraTable("killr_video","movies")
+               .select("release_year","genres")
+
+val movies2014 = movies.filter(row =&gt; row.getInt("release_year") == 2014)
+val total2014  = movies2014.count
+val comedy2014 = movies2014.filter(row =&gt; row.getSet[String]("genres")
+                                          contains "Comedy").count
+val percentage2014 = 100.0 * comedy2014 / total2014
+
+val movies2013 = movies.filter(row =&gt; row.getInt("release_year") == 2013)
+val total2013  = movies2013.count
+val comedy2013 = movies2013.filter(row =&gt; row.getSet[String]("genres")
+                                          contains "Comedy").count
+val percentage2013 = 100.0 * comedy2013 / total2013</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Study this simple program that serves as our running example in this presentation.</p></div>
+<div class="paragraph"><p>Its goal is to analyze how the percentage of comedy movies from 2014 compares to the
+percentage of comedy movies from 2013. Did we have more laughter in 2014 or in 2013?</p></div>
+<div class="paragraph"><p>We first retrieve all movies from Cassandra table <em>movies</em>
+and only keep information about <em>release_year</em> and <em>genres</em> for each movie.</p></div>
+<div class="paragraph"><p>We then apply <em>filter</em> based on <em>release_year</em> == 2014 and <em>count</em> the total number
+of movies release in 2014. We use another <em>filter</em> to only keep comedy movies from 2014 and we <em>count</em> them.</p></div>
+<div class="paragraph"><p>Given the two counts, <em>total2014</em> and <em>comedy2014</em>, it is straightforward to compute the percentage of comedy
+movies from 2014.</p></div>
+<div class="paragraph"><p>We do the same for movies from 2013.</p></div>
+<div class="paragraph"><p>Like we said, this program is simple and it works. However, it is suboptimal as we show in the following slides.
+The challenge is to optimize this code to run faster!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="dag-of-operations">
+<h2>DAG of Operations</h2>
+<div class="imageblock center">
+<div class="content">
+<img alt="dag" src="images/courses/DS420/components/sections/spark/rdd-persistence/dag.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>To understand how our program is executed by Spark, let us look at the
+Directed Acyclic Graph (DAG) of operations (e.g., transformations and actions).
+In this case, the DAG is really a tree because we are not using any binary operations.</p></div>
+<div class="paragraph"><p>Think about this DAG as a logical evaluation plan for our computation.
+Notice that leaf nodes ALWAYS represent results returned by actions because only actions trigger computation.
+Transformations are evaluated lazily and will not do actual computation until an action is seen.</p></div>
+<div class="paragraph"><p>A physical evaluation plan may however be different.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="stages-of-computation">
+<h2>Stages of Computation</h2>
+<div class="paragraph"><p><strong>Stage 1</strong></p></div>
+<div class="imageblock center">
+<div class="content">
+<img alt="stage1" src="images/courses/DS420/components/sections/spark/rdd-persistence/stage1.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Spark will evaluate our program in stages. Here is the first stage.</p></div>
+<div class="paragraph"><p>When Spark sees the first <em>count</em> action, it starts evaluation. In particular, to return the result to a client,
+Spark needs to compute all intermediate RDDs: retrieve data from Cassandra into RDD <em>movies</em>, apply <em>filter</em> to get new RDD
+<em>movies2014</em> and <em>count</em> its elements.</p></div>
+<div class="paragraph"><p>What is VERY IMPORTANT to understand is that intermediate data products, such RDDs <em>movies</em> and <em>movies2014</em>,
+are not completely materialized in memory. Spark only needs one partition to schedule a computational task and once
+the task completes, memory can be reused for another partition that will be processed by another task.
+In other words, intermediate results will be lost.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Stages 1 and 2</strong></p></div>
+<div class="imageblock center">
+<div class="content">
+<img alt="stage2" src="images/courses/DS420/components/sections/spark/rdd-persistence/stage2.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Once Spark finishes Stage 1, resources are freed to deal with our second <em>count</em> action.
+This is Stage 2. While tasks in each stage are executed in parallel, stages are executed sequentially.</p></div>
+<div class="paragraph"><p>To compute the result of the second <em>count</em>, Spark has to compute three intermediate data products. We
+have seen RDDs <em>movies</em> and <em>movies2014</em> before, in Stage 1, but their data is lost and has to be recomputed
+again in Stage 2. The third RDD is unnamed: we do not have a <em>val</em> to refer to it in the program.</p></div>
+<div class="paragraph"><p>Wow! Stage 2 does not reuse anything from Stage 1!</p></div>
+<div class="paragraph"><p>Note: "(1)" and "(2)" on the diagram denote first and second time a dataset is computed, respectively. For
+example, data for RDDs <em>movies</em> and <em>movies2014</em> is computed for the second time in Stage 2.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Stages 1, 2, and 3</strong></p></div>
+<div class="imageblock center">
+<div class="content">
+<img alt="stage3" src="images/courses/DS420/components/sections/spark/rdd-persistence/stage3.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Stage 3. You get the idea. RDD <em>movies</em> is recomputed again.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Stages 1, 2, 3, and 4</strong></p></div>
+<div class="imageblock center">
+<div class="content">
+<img alt="stage4" src="images/courses/DS420/components/sections/spark/rdd-persistence/stage4.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Final Stage 4. How inefficient! A lot of redundant re-computation!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="the-challenge-summary">
+<h2>The Challenge: Summary</h2>
+<div class="paragraph"><p>Efficiency issues:</p></div>
+<div class="ulist">
+<ul>
+<li>Reading the same data from Cassandra into RDD <em>movies</em> four times</li>
+<li>Recomputing RDD <em>movies2014</em> twice</li>
+<li>Recomputing RDD <em>movies2013</em> twice</li>
+</ul>
+</div>
+<div class="paragraph"><p>Take aways:</p></div>
+<div class="ulist">
+<ul>
+<li>Recomputing an RDD multiple times due to multiple actions on the RDD or its derivatives</li>
+<li>Need a way to materialize and reuse an RDD after it is computed for the first time</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Indeed, our code is suboptimal.
+We can do better!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="rdd-persistence">
+<h2>RDD Persistence</h2>
+<div class="paragraph"><p><strong>One of the most important optimizations in Spark for iterative algorithms and interactive computation!</strong></p></div>
+<div class="ulist">
+<ul>
+<li>You can instruct Spark to cache or persist any RDD in your program</li>
+<li>Persisted RDD is kept in memory (by default) once it is computed for the first time</li>
+<li>Persisted RDD is reused by other operations that require the same dataset</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph"><p>The persistence mechanism should be used to avoid recomputing the same dataset multiple times.
+With respect to a DAG of operations, any RDD that is a common ancestor of two or more leaf nodes resulting from
+actions is a good candidate for the persistence optimization.</p></div>
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>The mechanism that allows us to materialize and reuse an RDD in Spark is called <em>RDD persistence</em>.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="rdd-persistence-api">
+<h2>RDD Persistence API</h2>
+<div class="paragraph"><p><strong>Any RDD, including a Cassandra RDD, can be cached or persisted</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:25%" />
+<col style="width:75%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Transformation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>persist</strong>([<em>storageLevel</em>])</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Persists the source RDD according to a storage level specified by the optional parameter. The default storage level is
+<em>org.apache.spark.storage.StorageLevel.MEMORY_ONLY</em>, which prescribes persisting
+RDD elements as deserialized Java objects in the JVM.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>cache</strong>()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Same as <em>persist</em>() or <em>persist</em>(<em>StorageLevel.MEMORY_ONLY</em>).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>unpersist</strong>()</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unpersists the source RDD (manually). It is safe to not use this transformation
+because Spark automatically monitors and unpersists least-recently-used RDD partitions.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph"><p>When using <em>cache</em>() or <em>persist</em>(), if an RDD does not fit into memory,
+some partitions will not be cached and will be recomputed on the fly when needed.</p></div>
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Here are the three transformations of the RDD Persistence API.</p></div>
+<div class="paragraph"><p>More storage levels for <em>persist</em> are discussed on the next slide.</p></div>
+<div class="paragraph"><p><em>cache</em> is a convenient synonym of <em>persist</em> with the default storage level.</p></div>
+<div class="paragraph"><p>You almost never need to use <em>unpersist</em> explicitly unless there is a specific need
+in your application to force Spark to unpersist an RDD immediately.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="storage-levels">
+<h2>Storage Levels</h2>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:25%" />
+<col style="width:75%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Storage Level</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>MEMORY_ONLY</em> <em>MEMORY_ONLY_SER</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Persisting RDD elements as <em>deserialized</em> or <em>serialized</em> Java objects in the JVM, respectively. Partitions
+that do not fit into memory are not cached and recomputed when needed.
+<em>MEMORY_ONLY_SER</em> is more space-efficient but more CPU-intensive than <em>MEMORY_ONLY</em>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>MEMORY_AND_DISK</em> <em>MEMORY_AND_DISK_SER</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Persisting RDD elements as <em>deserialized</em> or <em>serialized</em> Java objects in the JVM, respectively. Partitions
+that do not fit into memory are spilled to disk.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>DISK_ONLY</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Persisting RDD partitions on disk.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>MEMORY_ONLY_2</em>, <em>MEMORY_AND_DISK_2</em>, &#8230;&#8203;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Same as the respective storage levels above, but with replication on two nodes in a cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>OFF_HEAP</em> (experimental)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Persisting the source RDD in <em>serialized</em> format in <em>Tachyon</em> (a memory-centric distributed storage system).</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph"><p>In some cases, recomputing partitions may be faster than reading persisted partitions from disk!</p></div>
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Study the different storage level possibilities for <em>persist</em>.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="solving-the-challenge">
+<h2>Solving the Challenge</h2>
+<div class="paragraph"><p><strong>Caching RDD <em>movies</em></strong></p></div>
+<div class="imageblock center">
+<div class="content">
+<img alt="cache1" src="images/courses/DS420/components/sections/spark/rdd-persistence/cache1.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Let us use the Persistence API to optimize our program.</p></div>
+<div class="paragraph"><p>This diagram shows the four stages of computation after
+we <em>cache</em> RDD <em>movies</em>. As a result, RDD <em>movies</em> is computed
+and cached once during Stage 1 and is reused in the remaining three stages.</p></div>
+<div class="paragraph"><p>We still have redundant computation for RDDs <em>movies2014</em> and <em>movies2013</em>.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Caching RDDs <em>movies2014</em> and <em>movies2013</em></strong></p></div>
+<div class="imageblock center">
+<div class="content">
+<img alt="cache2" src="images/courses/DS420/components/sections/spark/rdd-persistence/cache2.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>After we <em>cache</em> RDDs <em>movies2014</em> and <em>movies2013</em>, we have
+optimal computation.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="final-solution">
+<h2>Final Solution</h2>
+<div class="imageblock right" style="float: right">
+<div class="content">
+<img alt="movies" src="images/courses/DS420/components/sections/spark/rdd-persistence/movies.svg" />
+</div>
+</div>
+<div class="listingblock left">
+<div class="content">
+<pre class="CodeRay"><code>val movies = sc.cassandraTable("killr_video","movies")
+               .select("release_year","genres")
+               .cache
+
+val movies2014 = movies.filter(row =&gt; row.getInt("release_year") == 2014)
+                       .cache
+val total2014  = movies2014.count
+val comedy2014 = movies2014.filter(row =&gt; row.getSet[String]("genres")
+                                          contains "Comedy").count
+val percentage2014 = 100.0 * comedy2014 / total2014
+
+val movies2013 = movies.filter(row =&gt; row.getInt("release_year") == 2013)
+                       .cache
+val total2013  = movies2013.count
+val comedy2013 = movies2013.filter(row =&gt; row.getSet[String]("genres")
+                                          contains "Comedy").count
+val percentage2013 = 100.0 * comedy2013 / total2013</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Here is our final solution! We only added caching for the three RDDs
+to make our code run faster.</p></div>
+<div class="paragraph"><p>As a final note, if you execute this code in your application and point your
+browser to the Spark Application UI at port 4040, you will be able to see the
+four stages of computation and storage information for persisted RDDs.
+Have fun!</p></div>
+</div>
+</div>
+</section>
+<section class="slide transition-purple" id="courses-DS420-components-exercises-spark-performing-schema-evolution">
+<h2>Exercise: Performing Cassandra Database Schema Evolution Using Spark</h2>
+
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-understanding-partitioning">
+<h2>An RDD is a Distributed Collection of Partitions</h2>
+<div class="ulist">
+<ul>
+<li>Spark automatically partitions RDDs</li>
+<li>Spark automatically distributes partitions among nodes</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="partitions" src="images/courses/DS420/components/sections/spark/understanding-partitioning/partitions.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>In this presentation, we will overview basics of Spark partitioning. Some details
+will be omitted here for brevity but will be covered in subsequent presentations
+when the time is right.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="rdd-partitioning-properties">
+<h2>RDD Partitioning Properties</h2>
+<div class="paragraph"><p><strong>Number of partitions</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:20%" />
+<col style="width:80%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>partitions</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns an <em>Array</em> with all partition references for the source RDD.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>partitions.size</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns a number of partitions in the source RDD.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>val movies = sc.parallelize(List(("Alice in Wonderland",2016), ("Alice Through the Looking Glass",2010), ...))
+println(movies.partitions.size)
+// Sample output: 3
+
+val interactions = sc.cassandraTable("killr_video","video_interactions_by_user")
+println(interactions.partitions.size)
+// Sample output: 4</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>To find how many partitions an RDD contains, you can access RDD&#8217;s property <em>partitions</em> and get its <em>size</em>.</p></div>
+<div class="paragraph"><p>In this example, we output a number of partitions for two sample RDDs: <em>movies</em> (created by parallelizing a collection)
+and <em>interactions</em> (created from  a Cassandra table). Notice that this code does not use any actions and
+therefore actual partitions with data are never computed. Nevertheless, Spark has a plan on how to compute such partitions
+and how many of them.</p></div>
+<div class="paragraph"><p>The content of the <em>partitions</em> array encodes references to partitions and is unlikely to be useful for developing
+Spark applications.
+An element of the <em>partitions</em> array may look similar to
+<em>org.apache.spark.rdd.ParallelCollectionPartition@735</em> or
+<em>CassandraPartition(0,Set(/172.31.26.129),Vector(CqlTokenRange(token("user_id") &#8656; ?,WrappedArray(-3074457345618258603))),127)</em>.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Partitioner</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:20%" />
+<col style="width:80%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>partitioner</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns an <em>Option</em>[<em>Partitioner</em>] for the source RDD, where <em>Partitioner</em>, if any, can refer to
+<em>HashPartitioner</em>, <em>RangePartitioner</em>, or a custom partitioner.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>val movies = sc.parallelize(List(("Alice in Wonderland",2016), ("Alice Through the Looking Glass",2010), ...))
+println(movies.partitioner)
+// Sample output: None
+
+val moviesByYear = movies.map{case (t,y) =&gt; (y,t)}.groupByKey
+println(moviesByYear.partitioner)
+// Sample output: Some(org.apache.spark.HashPartitioner@3)</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>RDD&#8217;s <em>partitioner</em> property can give you an idea about a strategy that is used to create RDD partitions.
+<em>HashPartitioner</em> is the most common strategy for key-based operations. <em>RangePartitioner</em> is used when sorting by key
+is required. Custom partitioners are also possible. Finally, a <em>partitioner</em> can be <em>None</em>,
+which simply means that
+partitioning strategy is not based on data characteristics; for example, it is random and uniform.</p></div>
+<div class="paragraph"><p>In this example, in the first case, <em>partitioner</em> is None and in the second case, when <em>groupByKey</em>
+is used, <em>partitioner</em> is <em>HashPartitioner</em>. When retrieving data from Cassandra, <em>partitioner</em> would be <em>None</em>
+because partitioning is controlled by Spark-Cassandra Connector rather than Spark.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="factors-that-affect-partitioning">
+<h2>Factors That Affect Partitioning</h2>
+<div class="ulist">
+<ul>
+<li>Resources available to an application</li>
+<li>External data sources</li>
+<li>Transformations used to derive an RDD</li>
+<li>Partitioning properties of parent RDD(s)</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>Resources available to an application, such as a number of cores</li>
+<li>External data sources, such as local collections, Cassandra tables, and HDFS files</li>
+<li>Transformations used to derive an RDD, such as key-based transformations</li>
+<li>Partitioning properties of parent RDD(s) that are used to derive an RDD</li>
+</ul>
+</div>
+<div class="paragraph"><p>We will discuss these factors in more detail in a separate presentation.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="partitioning-and-computation">
+<h2>Partitioning and Computation</h2>
+<div class="ulist">
+<ul>
+<li>Partition is the smallest unit of data</li>
+<li>Task is the smallest unit of computation</li>
+<li><em>Number of partitions</em> = <em>Number of tasks</em></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>It is important to understand the relationship between partitioning and computation.
+A separate task is scheduled to perform computation on a partition. Therefore,
+in the context of one operation, the number of tasks would be equivalent to the number
+of partitions.</p></div>
+</div>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="tasks" src="images/courses/DS420/components/sections/spark/understanding-partitioning/tasks.svg" />
+</div>
+</div>
+</section>
+<section class="slide" id="partitioning-and-default-parallelism">
+<h2>Partitioning and Default Parallelism</h2>
+<div class="ulist">
+<ul>
+<li><p>
+Default level of parallelism refers to a number of tasks that can be executed concurrently<div class="ulist">
+<ul>
+<li>Defined as a number of cores allocated to an application in a cluster</li>
+<li>General recommendation: <em>Number of partitions</em> &gt;= <em>Default Parallelism</em></li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:20%" />
+<col style="width:80%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>defaultParallelism</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns a default level of parallelism of a <em>SparkContext</em> object.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>println(sc.defaultParallelism)
+// Sample output: 3
+
+val movies = sc.parallelize(List(("Alice in Wonderland",2016), ("Alice Through the Looking Glass",2010), ...))
+println(movies.partitions.size)
+// Sample output: 3</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Another very important and related notion is a default level of parallelism for an application
+and its <em>SparkContext</em> object. The default level of parallelism refers to a number of tasks
+that can be executed concurrently and is defined as a number of cores allocated to an application in a cluster.
+The default level of parallelism is customizable for each application via the <em>spark.default.parallelism</em> property.</p></div>
+<div class="paragraph"><p>In this example, we have 3 cores that are available to an application. You can see that <em>parallelize</em> creates
+3 partitions according to the default level of parallelism.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="controlling-partitioning">
+<h2>Controlling Partitioning</h2>
+<div class="paragraph"><p><strong>One of the most important performance optimizations in Spark</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Special transformations for repartitioning datasets with desired partitioning properties</li>
+<li>Many transformations support an additional parameter for a desired number of tasks</li>
+<li>Certain application settings affect partitioning</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph"><p>Choosing appropriate partitioning properties based on characteristics of your data and computation may
+drastically improve performance. A good solution is usually found via experimenting with different parameters.</p></div>
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>To achieve an optimal performance for your application, you will frequently need to control partitioning, including
+a number of partitions to increase or decrease parallelism and a partitioner that can be reused by multiple operations.</p></div>
+<div class="paragraph"><p>Spark supports special transformations for repartitioning datasets with desired partitioning properties. In addition,
+many transformations support a parameter for a desired number of tasks. Certain application settings affect partitioning,
+including partitions created by Spark-Cassandra Connector.</p></div>
+<div class="paragraph"><p>We will discuss how and when to control partitioning in more detail in a separate presentation.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-data-shuffling">
+<h2>Data Shuffling</h2>
+<div class="paragraph"><p><strong>Definition and use cases</strong></p></div>
+<div class="paragraph"><p><em><strong>Definition</strong></em></p></div>
+<div class="verseblock">
+<pre class="content">Data shuffling is the process of reorganizing and transferring data from existing partitions
+into new partitions to achieve one or both properties for the resulting partitions:
+1) having a desired number of partitions
+2) having pairs with the same key in the same partition</pre>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="paragraph"><p><em><strong>Main use cases</strong></em></p></div>
+<div class="ulist">
+<ul>
+<li>Controlling the level of parallelism</li>
+<li>Supporting some key-based operations</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Understanding data shuffling helps to write efficient code.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="which-operations-may-trigger-shuffling">
+<h2>Which Operations May Trigger Shuffling?</h2>
+<div class="ulist">
+<ul>
+<li><p>
+Repartitioning transformations<div class="ulist">
+<ul>
+<li><em>repartition</em>, <em>coalesce</em>, <em>partitionBy</em></li>
+</ul>
+</div></p></li>
+<li><p>
+Many key-based operations<div class="ulist">
+<ul>
+<li><em>reduceByKey</em>, <em>foldByKey</em>, <em>combineByKey</em></li>
+<li><em>groupByKey</em>, <em>cogroup</em></li>
+<li><em>join</em>, <em>leftOuterJoin</em>, <em>rightOuterJoin</em>, <em>fullOuterJoin</em></li>
+<li><em>sortByKey</em></li>
+<li><em>lookup</em></li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>These are some exceptions:</p></div>
+<div class="ulist">
+<ul>
+<li><em>coalesce</em> may or may not require shuffling depending on its <em>shuffle</em> parameter</li>
+<li>Key-based operations will not shuffle data if an RDD has an appropriate partitioner (in other words,
+the RDD has been shuffled in a previous transformation)</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide" id="how-does-shuffling-work">
+<h2>How Does Shuffling Work?</h2>
+<div class="paragraph"><p><strong>Shuffling an RDD with three partitions into an RDD with four partitions</strong></p></div>
+<div class="imageblock center">
+<div class="content">
+<img alt="shuffling" src="images/courses/DS420/components/sections/spark/data-shuffling/shuffling.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Let us consider how shuffling is done in general. This illustration shows
+how an RDD with three partitions is shuffled into an RDD with four partitions.</p></div>
+<div class="ulist">
+<ul>
+<li>Shuffle write: A <em>Map Task</em> is executed on each original partition. It repartitions data into four new buckets that
+are written to disk on a worker node. Partial aggregation may be used for some operations (e.g., <em>reduceByKey</em>),
+to aggregate pairs with the same key in the buckets before writing them to disk.</li>
+<li>Shuffle read: Four <em>Reduce Tasks</em> read their corresponding on-disk buckets into memory to assemble new partitions:
+A, B, C, and D. Final aggregation is again only required for certain operations. The new RDD now has four partitions
+that can be processed by further operations.</li>
+</ul>
+</div>
+<div class="paragraph"><p>How buckets are computed depends on an operation and its partitioner (<em>None</em>, <em>HashPartitioner</em>, <em>RangePartitioner</em>, custom partitioner).</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="types-of-shuffling">
+<h2>Types of Shuffling</h2>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:50%" />
+<col style="width:50%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Sort-based shuffling</th>
+<th class="tableblock halign-left valign-top">Hash-based shuffling</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="ulist">
+<ul>
+<li>Generally more efficient</li>
+<li>Default strategy in Spark 1.2+</li>
+<li>Writes <em>2 x M</em> files</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="two files" src="images/courses/DS420/components/sections/spark/data-shuffling/two-files.svg" />
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="ulist">
+<ul>
+<li>Generally less efficient</li>
+<li>Default strategy prior Spark 1.2</li>
+<li>Writes <em>M x R</em> files</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="many files" src="images/courses/DS420/components/sections/spark/data-shuffling/many-files.svg" />
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Sort-based shuffling is generally more efficient for big data use cases.</p></div>
+<div class="paragraph"><p><em>M</em> denotes a number of map tasks.
+<em>R</em> denotes a number of reduce tasks.</p></div>
+<div class="paragraph"><p>The illustrations are for a single map task.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="shuffling-is-expensive">
+<h2>Shuffling is Expensive</h2>
+<div class="paragraph"><p><strong>Shuffling cost factors</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Disk IO</li>
+<li>Network traffic</li>
+<li>Partitioning</li>
+<li>External sorting</li>
+<li>Serialization/deserialization</li>
+<li>Data compression</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Some of these factors may be eliminated or partially eliminated, depending
+on application settings and shuffling algorithms used. However Disk IO and
+network traffic are guaranteed!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="how-to-optimize-shuffling-performance">
+<h2>How to Optimize Shuffling Performance?</h2>
+<div class="ulist">
+<ul>
+<li>Control partitioning to avoid re-shuffling</li>
+<li>Take advantage of aggregation when possible</li>
+<li>Choose appropriate application properties</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<em>Spark Application Web UI</em> provides information about your application shuffle writes and reads.
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="screenshot ui" src="images/courses/DS420/components/sections/spark/data-shuffling/screenshot-ui.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>Control partitioning to avoid re-shuffling&#8201;&#8212;&#8201;discussed in a separate vertex</li>
+<li>Take advantage of aggregation when possible&#8201;&#8212;&#8201;prefer <em>reduceByKey</em> to <em>groupByKey</em> when doing aggregation</li>
+<li>Choose appropriate application properties&#8201;&#8212;&#8201;next slide</li>
+</ul>
+</div>
+<div class="paragraph"><p>The screenshot shows shuffle write and shuffle read in the last two columns.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="application-shuffling-properties">
+<h2>Application Shuffling Properties</h2>
+<div class="paragraph"><p><strong>Configurable on a <em>SparkConf</em> object</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:28%" />
+<col style="width:57%" />
+<col style="width:14%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spark.shuffle.manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a data shuffling strategy to be <em>sort</em> or <em>hash</em>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>sort</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spark.shuffle.spill</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables or disables spilling data out to disk by reduce tasks.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>true</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spark.shuffle.memoryFraction</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a spilling threshold as a fraction of Java heap.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>0.2</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spark.shuffle.sort.bypassMergeThreshold</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Instructs sort-based shuffling to not  merge-sort data
+if there is no map-side aggregation and a number of reduce tasks is not greater than
+this threshold.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>200</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spark.shuffle.compress</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables or disable compression for shuffle writes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>true</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spark.shuffle.spill.compress</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enables or disable compression for data spilled out to disk.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>true</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Some of the common application shuffling properties. Default values are generally good.</p></div>
+<div class="paragraph"><p>This is not a comprehensive list of shuffling properties.</p></div>
+</div>
+</div>
+</section>
+<section class="slide transition-purple" id="courses-DS420-components-exercises-spark-validating-data">
+<h2>Exercise: Validating Cassandra Data Using Spark</h2>
+
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-controlling-partitioning">
+<h2>Controlling Partitioning</h2>
+<div class="paragraph"><p><strong>One of the most important performance optimizations in Spark</strong></p></div>
+<div class="ulist">
+<ul>
+<li><p>
+Number of partitions<div class="ulist">
+<ul>
+<li>Affects a number of tasks and the level of parallelism</li>
+<li><em>Goal</em>: balancing task execution and scheduling times</li>
+</ul>
+</div></p></li>
+<li><p>
+Partitioner<div class="ulist">
+<ul>
+<li>Affects key-based operations</li>
+<li><em>Goal</em>: Avoiding shuffling the same dataset multiple times</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Optimal partitioning results in optimal performance.</p></div>
+<div class="paragraph"><p>By controlling a number of partitions in an RDD, we affect a number
+of tasks that execute our operations and, ultimately, the level of parallelism for
+each operation. If a task is running for too long and fails, re-executing the task will still
+take long time. If tasks are running for a few milliseconds, then it is likely that scheduling time
+will have a considerable impact on overall performance of an application. Finding a balance between
+task execution and scheduling times is the first main reason to pay attention to partitioning.</p></div>
+<div class="paragraph"><p>By controlling a partitioner for an RDD, we affect key-based operations that rely on specific partitioners,
+such as <em>HashPartitioner</em> or <em>RangePartitioner</em>, to perform computation. Setting a partitioner for an RDD
+triggers the process called shuffling, which is expensive because data has to be reorganized into
+new partitions, and that requires disk I/O and network traffic. Pre-partitioning and caching an RDD in certain situations
+can avoid re-shuffling the same RDD multiple times, which is the second main reason to control partitioning.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="how-many-partitions-is-good">
+<h2>How Many Partitions is Good?</h2>
+<div class="paragraph"><p><strong>General insights</strong></p></div>
+<div class="ulist">
+<ul>
+<li><p>
+Too few partitions can be a problem<div class="ulist">
+<ul>
+<li>Less concurrency</li>
+<li>Possible data skew</li>
+<li>Increased memory pressure</li>
+<li>Longer recovery from a failure</li>
+</ul>
+</div></p></li>
+<li><p>
+Too many partitions can be a problem<div class="ulist">
+<ul>
+<li>Task scheduling may take longer than task execution</li>
+<li>More lineage information to maintain</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>These are some general insights on a number of partitions.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>General recommendations</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Usually between 100 and 10,000 partitions depending on data and cluster size</li>
+<li>Lower bound - 2x number of cores in a cluster available to an application</li>
+<li>Upper bound - tasks should take 100+ ms to execute</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph"><p>You will often need to change the default number of partitions to
+optimize your application performance! The best results are frequently achieved by
+experimenting with different partitioning settings and monitoring the metrics in
+<em>Spark Application Web UI</em>.</p></div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="screenshot ui" src="images/courses/DS420/components/sections/spark/controlling-partitioning/screenshot-ui.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Remember that, by default, the default level of parallelism (<em>sc.defaultParallelism</em>) equals
+to a number of cores available to an application, which implies the number of partitions for
+<em>parallelize</em>, <em>textFile</em>, <em>cassandraTable</em>, and many Spark operations.</p></div>
+<div class="paragraph"><p>You can always get metrics for scheduling and execution times from the Spark Application UI.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="which-operations-do-require-a-partitioner">
+<h2>Which Operations Do Require a Partitioner?</h2>
+<div class="paragraph"><p><strong>Many key-based operations</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:20%" />
+<col style="width:80%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Partitioner</th>
+<th class="tableblock halign-left valign-top">Operations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>HashPartitioner</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>reduceByKey</em>, <em>foldByKey</em>, <em>combineByKey</em>,
+   <em>groupByKey</em>, <em>cogroup</em>,
+   <em>join</em>, <em>leftOuterJoin</em>, <em>rightOuterJoin</em>, <em>fullOuterJoin</em>, <em>lookup</em></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>RangePartitioner</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>sortByKey</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph"><p>Spark allows defining custom partitioners, which may be useful when you have special requirements
+for assigning a key to a partition.</p></div>
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Most key-based operations (transformations and actions) require a key-based partitioner.
+If an input RDD has <em>None</em> as a partitioner, Spark will shuffle data and set a partitioner while performing an operation.
+If an input RDD has a key-based partitioner, Spark will reuse it without shuffling to perform an operation.
+We need to focus on reusing a partitioner whenever possible!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="setting-and-reusing-a-partitioner">
+<h2>Setting and Reusing a Partitioner</h2>
+<div class="paragraph"><p><strong>Sample optimization scenario</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:40%" />
+<col style="width:60%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Suboptimal case</th>
+<th class="tableblock halign-left valign-top">Optimal case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div><div class="imageblock center">
+<div class="content">
+<img alt="suboptimal case" src="images/courses/DS420/components/sections/spark/controlling-partitioning/suboptimal-case.svg" />
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div><div class="imageblock center">
+<div class="content">
+<img alt="optimal case" src="images/courses/DS420/components/sections/spark/controlling-partitioning/optimal-case.svg" />
+</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Here is a sample optimization scenario that demonstrates how to avoid re-shuffling the same RDD.
+We use DAGs of operations to illustrate the concepts.</p></div>
+<div class="paragraph"><p>In the suboptimal case, we perform two key-based transformations on <em>rdd1</em> with no partitioner to derive <em>rdd2</em> and <em>rdd3</em> and
+one key-based action. Let us assume all the three operations require a <em>HashPartitioner</em>. There are two
+more actions on <em>rdd2</em> and <em>rdd3</em>, which may or may not be key-based. Given the lazy evaluation
+used in Spark and the three actions, we will have to perform shuffling of <em>rdd1</em> three times
+(even if <em>rdd1</em> is cached in-memory)
+to satisfy key-based partitioning requirements. That is not efficient.</p></div>
+<div class="paragraph"><p>In the optimal case, we first explicitly pre-partition and cache <em>rdd1</em> using special transformations
+and <em>HashPartitioner</em> into <em>rdd1'</em>. This enables the key-based transformations and action to reuse
+the <em>rdd1'</em> partitioner rather then shuffle. As a result, Spark can avoid two extra shuffling operations.</p></div>
+<div class="paragraph"><p>As you may have noticed, use cases for the setting a partitioner and caching optimizations have some common ground.
+With respect to a DAG of operations, any RDD that has multiple descendants is a good candidate for caching.
+It is also a good candidate for explicitly setting a key-based partitioner if its descendants can
+reuse the partitioner. Therefore, setting a partitioner is always followed by caching.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="mechanisms-for-controlling-partitioning">
+<h2>Mechanisms for Controlling Partitioning</h2>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:25%" />
+<col style="width:75%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Mechanism</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Application settings</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Special properties, such as <em>spark.default.parallelism</em> and <em>spark.cassandra.input.split.size_in_mb</em>,
+that can affect a number of partitions for Spark and Cassandra RDDs when set on the <em>SparkConf</em> object to initialize an application <em>SparkContext</em>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Operation parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Many API calls, transformations, and actions can take an additional parameter to specify a number of tasks to use to
+compute the result, which directly affects a number of partitions. For example, <em>parallelize</em>(&#8230;&#8203;,<em>numTasks</em>),
+<em>textFile</em>(&#8230;&#8203;,<em>numTasks</em>), <em>reduceByKey</em>(&#8230;&#8203;,<em>numTasks</em>), <em>groupByKey</em>(<em>numTasks</em>), <em>join</em>(&#8230;&#8203;,<em>numTasks</em>),
+<em>countByKey</em>(<em>numTasks</em>), etc.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Repartitioning transformations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>repartition</em>, <em>coalesce</em>,
+ <em>partitionBy</em></p></td>
+</tr>
+</tbody>
+</table>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>The first two mechanisms should be straightforward.
+They only allow controlling a number of partitions (level of parallelism).</p></div>
+<div class="paragraph"><p>For the rest of this presentation, we will focus on the last mechanism&#8201;&#8212;&#8201;the three repartitioning transformations.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="transformations-em-repartition-em-and-em-coalesce-em">
+<h2>Transformations <em>repartition</em> and <em>coalesce</em></h2>
+<div class="paragraph"><p><strong>Repartitioning transformations for generic RDDs</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:20%" />
+<col style="width:80%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Transformation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>repartition</strong>(<em>numPartitions</em>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A new RDD is formed by shuffling elements of the source RDD into <em>numPartitions</em> new partitions,
+where <em>numPartitions</em> can be larger or smaller than the number of partitions in the source RDD. The new
+RDD partitioner is set to <em>None</em>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>coalesce</strong>(<em>numPartitions</em>, [<em>shuffle</em>])</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A new RDD is formed by merging partitions of the source RDD into <em>numPartitions</em> new partitions,
+where <em>numPartitions</em> must be smaller than the number of partitions in the source RDD. The optional
+parameter disables shuffling by default (<em>shuffle = false</em>). With shuffling enabled, <em>coalesce</em> can be used
+like <em>repartition</em> to decrease or increase a number of partitions. The new
+RDD partitioner is set to <em>None</em>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>These transformations always result in <em>None</em> as a partitioner, even if a parent RDD has a key-based partitioner.
+Therefore, they are commonly used with generic rather than key-value pair RDDs.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Example</strong></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>println(sc.defaultParallelism)
+// Sample output: 3
+
+val movies = sc.parallelize(List(("Alice in Wonderland",2016), ("Alice Through the Looking Glass",2010), ...))
+println(movies.partitions.size)
+// Sample output: 3
+
+println(movies.repartition(2*sc.defaultParallelism).partitions.size)
+// Sample output: 6
+
+println(movies.coalesce(4).partitions.size)
+// Sample output: 4</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>In this example, <em>repartition</em> will shuffle but <em>coalesce</em> will not.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="transformation-em-partitionby-em">
+<h2>Transformation <em>partitionBy</em></h2>
+<div class="paragraph"><p><strong>Repartitioning transformation for key-value pair RDDs</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:20%" />
+<col style="width:80%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Transformation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>partitionBy</strong>(<em>Partitioner</em>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A new RDD is formed by shuffling elements of the source RDD  into <em>numPartitions</em> new partitions
+using a specified <em>Partitioner</em>, which
+can be <em>HashPartitioner</em>(<em>numPartitions</em>), <em>RangePartitioner</em>(<em>numPartitions</em>, <em>sourceRDD</em>), or
+a custom partitioner.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>val movies = sc.parallelize(List(("Alice in Wonderland",2016), ("Alice Through the Looking Glass",2010), ...))
+               .partitionBy(new org.apache.spark.HashPartitioner(9))
+
+println(movies.partitioner)
+// Sample output: HashPartitioner@9</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>The <em>partitionBy</em> transformation results in an RDD with a desired partitioner.
+Therefore, it is commonly used with key-value pair RDDs.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="challenge">
+<h2>Challenge</h2>
+<div class="paragraph"><p><strong>Suboptimal code</strong></p></div>
+<div class="imageblock right" style="float: right">
+<div class="content">
+<img alt="movies" src="images/courses/DS420/components/sections/spark/controlling-partitioning/movies.svg" />
+</div>
+</div>
+<div class="listingblock left">
+<div class="content">
+<pre class="CodeRay"><code>val movies = sc.cassandraTable("killr_video","movies")
+               .keyBy(row =&gt; row.getInt("release_year"))
+               .repartition(2*sc.defaultParallelism)
+
+val movieCountByYear  = movies.countByKey.foreach(println)
+
+val moviesByYear = movies.groupByKey.collect.foreach(println)</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Shuffling is done three times in this example.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="challenge-solution">
+<h2>Challenge Solution</h2>
+<div class="paragraph"><p><strong>Optimized code</strong></p></div>
+<div class="imageblock right" style="float: right">
+<div class="content">
+<img alt="movies" src="images/courses/DS420/components/sections/spark/controlling-partitioning/movies.svg" />
+</div>
+</div>
+<div class="listingblock left">
+<div class="content">
+<pre class="CodeRay"><code>val movies = sc.cassandraTable("killr_video","movies")
+               .keyBy(row =&gt; row.getInt("release_year"))
+               .partitionBy(
+                 new org.apache.spark.HashPartitioner(2*sc.defaultParallelism))
+               .cache
+
+val movieCountByYear  = movies.countByKey.foreach(println)
+
+val moviesByYear = movies.groupByKey.collect.foreach(println)</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Shuffling is only done once in this example.</p></div>
+</div>
+</div>
+</section>
+<section class="slide transition-purple" id="courses-DS420-components-exercises-spark-computing-aggregates">
+<h2>Exercise: Computing Data Aggregates Using Spark</h2>
+
+</section>
+<section class="slide" id="courses-DS420-components-sections-spark-writing-efficient-sql">
+<h2>Spark SQL</h2>
+<div class="paragraph"><p><strong>A relational engine on top of Spark</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Starting point: <em>sqlContext</em> of type <em>HiveContext</em></li>
+<li>Data representation: DataFrame</li>
+<li>Structured queries: SQL, language-integrated queries, HiveQL</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Spark SQL is a Spark module that is used to query and process structured data.</p></div>
+<div class="paragraph"><p>DataFrames are structured data containers that are alike to tables in relational databases.
+DataFrame is the main programming abstraction in Spark SQL.</p></div>
+<div class="paragraph"><p>There are three flavors of relational queries available in Spark SQL.
+We will only look at SQL.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="dataframe">
+<h2>DataFrame</h2>
+<div class="paragraph"><p><strong>Main programming abstraction in Spark SQL</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Distributed collection of data organized into named columns</li>
+<li>Similar to a table in a relational database</li>
+<li>Has schema, rows, and rich API</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>scala&gt; val movies = sqlContext.sql("SELECT * FROM killr_video.movies")
+movies: org.apache.spark.sql.DataFrame =
+[movie_id: uuid, genres: array&lt;string&gt;, rating: float, release_year: int, title: string]</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>DataFrame is a representation of structured dataset that is usually a result of an SQL query.</p></div>
+<div class="paragraph"><p>DataFrame has a schema and a rich API that we will discuss in a separate presentation.</p></div>
+<div class="paragraph"><p>DataFrame is similar to RDD (also distributed collection of data) but has a different organization to
+achieve better performance.</p></div>
+<div class="paragraph"><p>The example shows a DataFrame returned by an SQL query.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="sql-queries">
+<h2>SQL Queries</h2>
+<div class="paragraph"><p><strong>Declarative approach</strong></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>sqlContext.sql("""
+   SELECT COUNT(*) AS total
+   FROM killr_video.movies_by_actor
+   WHERE actor = 'Johnny Depp'
+""").show
+
+
+   +-----+
+   |total|
+   +-----+
+   |   54|
+   +-----+</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>SQL is convenient way to query Cassandra tables!</p></div>
+<div class="paragraph"><p>Method <em>sql</em> takes an SQL query and returns a DataFrame with results.
+The query returns the number of Johnny Depp&#8217;s movies in our Cassandra database.</p></div>
+<div class="paragraph"><p>Action <em>show</em> displays the top 20 rows of DataFrame in a tabular form.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="predicate-pushdown-optimizations">
+<h2>Predicate Pushdown Optimizations</h2>
+<div class="paragraph"><p><strong>Automatic optimizations by <em>Spark-Cassandra Connector</em></strong></p></div>
+<div class="ulist">
+<ul>
+<li>Filtering on a partition key is pushed down to Cassandra</li>
+<li>Filtering on a clustering key is pushed down to Cassandra</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph"><p><em>Spark-Cassandra Connector</em> pushes any predicate that is valid in CQL down to Cassandra.
+Choosing the best Cassandra table for a query can substantially improve performance.</p></div>
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p><em>Spark-Cassandra Connector</em> automatically pushs down valid WHERE clauses to Cassandra as long as
+the pushdown option is enabled (it is enabled by default).</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="choosing-the-best-table-for-a-query">
+<h2>Choosing the Best Table for a Query</h2>
+<div class="paragraph"><p><strong>One query, two tables</strong></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>SELECT release_year, title
+FROM killr_video.???
+WHERE actor = 'Johnny Depp' AND release_year &lt; 2015
+ORDER BY release_year DESC</code></pre>
+</div>
+</div>
+<div class="imageblock" style="float: left">
+<div class="content">
+<img alt="schema" src="images/courses/DS420/components/sections/spark/writing-efficient-sql/schema.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Query: Find release years and titles of Johnny Depp&#8217;s movies released before 2015 and show results
+in descending release year order.</p></div>
+<div class="paragraph"><p>The query is expressed in SQL with the ??? placeholder for a table name.</p></div>
+<div class="paragraph"><p>Both tables can be used to answer the query. Which one will you choose?
+Pay attention to table partition and clustering keys.</p></div>
+<div class="paragraph"><p>Understanding the Cassandra data and query models is very important!</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="clustering-key-predicate-can-be-pushed">
+<h2>Clustering Key Predicate can be Pushed</h2>
+<div class="paragraph"><p><strong>actor = 'Johnny Depp'</strong></p></div>
+<div class="imageblock right" style="float: right">
+<div class="content">
+<img alt="actors by movie" src="images/courses/DS420/components/sections/spark/writing-efficient-sql/actors_by_movie.svg" />
+</div>
+</div>
+<div class="listingblock left">
+<div class="title"><em>SQL query</em></div>
+<div class="content">
+<pre class="CodeRay"><code>sqlContext.sql("""
+   SELECT release_year, title
+   FROM killr_video.actors_by_movie
+   WHERE actor = 'Johnny Depp' AND release_year &lt; 2015
+   ORDER BY release_year DESC
+""").show</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>This is not the best table choice.</p></div>
+<div class="paragraph"><p>Even though <em>actor = 'Johnny Depp'</em> can be pushed down to Cassandra, the query is still
+expensive because Cassandra will have to retrieve matching rows from many partitions.
+Once results are delivered from Cassandra, Spark still has to filter based on <em>release_year &lt; 2015</em>
+and perform sorting.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="all-predicates-can-be-pushed">
+<h2>All Predicates can be Pushed</h2>
+<div class="paragraph"><p><strong>actor = 'Johnny Depp' AND release_year &lt; 2015</strong></p></div>
+<div class="imageblock right" style="float: right">
+<div class="content">
+<img alt="movies by actor" src="images/courses/DS420/components/sections/spark/writing-efficient-sql/movies_by_actor.svg" />
+</div>
+</div>
+<div class="listingblock left">
+<div class="title"><em>SQL query</em></div>
+<div class="content">
+<pre class="CodeRay"><code>sqlContext.sql("""
+   SELECT release_year, title
+   FROM killr_video.movies_by_actor
+   WHERE actor = 'Johnny Depp' AND release_year &lt; 2015
+""").show</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Better table choice = faster and simpler query!</p></div>
+<div class="paragraph"><p>Much better performance: the whole WHERE clause can be pushed down to Cassandra;
+Cassandra will access only one partition very efficiently.</p></div>
+<div class="paragraph"><p>Simpler query: because data in the Cassandra partition for Johnny Depp is already ordered
+by clustering column <em>release_year</em>, no need to use ORDER BY.</p></div>
+</div>
+</div>
+</section>
+<section class="slide transition-purple" id="courses-DS420-components-exercises-spark-querying-sql">
+<h2>Exercise: Querying Cassandra Data Using Spark SQL</h2>
+
+</section>
+<div aria-role="navigation">
+<a class="deck-prev-link" href="#" title="Previous">
+<i class="icon-chevron-with-circle-left"></i>
+</a>
+<a class="deck-next-link" href="#" title="Next">
+<i class="icon-chevron-with-circle-right"></i>
+</a>
+</div>
+<form action="." class="goto-form" method="get">
+<label for="goto-slide">Go to Slide:</label>
+<input id="goto-slide" list="goto-datalist" name="slidenum" type="text" />
+<datalist id="goto-data-list"></datalist>
+<input type="submit" value="Go" />
+</form>
+</div>
+<script src="deck.js/jquery.min.js"></script>
+<script src="deck.js/d3.v2.js"></script>
+<script src="deck.js/jquery-ui.min.js"></script>
+<script src="deck.js/core/deck.core.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="deck.js/extensions/split/deck.split.js"></script>
+<script src="deck.js/extensions/animation/deck.animation.js"></script>
+<script src="deck.js/extensions/deck.js-notes/deck.notes.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/clone/deck.clone.js"></script>
+<script src="deck.js/extensions/svg/svg.min.js"></script>
+<script src="js/module-6.js"></script>
+<footer>
+<div class="flex-element deck-course">
+<p>&copy; 2016 DataStax. Use only with permission. &bull;
+<span class="course-title">Data Processing and Data Analytics with Apache Spark&#8482;</span></p>
+</div>
+<div class="flex-element deck-brand">
+<a href="http://academy.datastax.com" target="blank">DataStax Academy</a>
+</div>
+<div class="deck-progressbar">
+<span></span>
+</div>
+</footer>
+<script type="text/javascript">
+  //<![CDATA[
+    (function($, deck, undefined) {
+      $.deck.defaults.keys['previous'] = [8, 33, 37, 39];
+      $.deck.defaults.keys['next'] = [13, 32, 34, 39];
+    
+      $.extend(true, $[deck].defaults, {
+          countNested: false
+      });
+    
+      $.deck('.slide');
+      $.deck('disableScale');
+    })(jQuery, 'deck');
+  //]]>
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+    $(document).bind('deck.change', function(event, from, to) {
+      var width = to / ($.deck('getSlides').length - 1) * 100;
+      $('.deck-progressbar span').css('width', width + '%');
+    });
+  //]]>
+</script>
+</body>
+</html>
