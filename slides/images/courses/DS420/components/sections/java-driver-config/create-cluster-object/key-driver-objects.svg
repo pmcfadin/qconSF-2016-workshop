@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="966px" height="246px" viewBox="0 0 966 246" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>key_driver_objects</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="0%" id="linearGradient-1"></linearGradient>
+        <rect id="path-2" x="487" y="173" width="313.631423" height="72.8015721"></rect>
+        <mask id="mask-3" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="313.631423" height="72.8015721" fill="white">
+            <use xlink:href="#path-2"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ring-colored-smaller" transform="translate(925.680454, 65.567466) rotate(-180.000000) translate(-925.680454, -65.567466) translate(885.470284, 25.780560)">
+            <rect id="Rectangle-path" x="0" y="0" width="78.8587812" height="78.8587812"></rect>
+            <path d="M39.4293906,39.4293906 L39.4293906,3.90741709 C48.8504037,3.90741709 57.8855567,7.64989998 64.547219,14.3115623 L39.4293906,39.4293906" id="Shape" stroke="#FFFFFF" fill="#007A97"></path>
+            <path d="M39.4293906,39.4293906 L64.547219,14.3115623 C71.2088813,20.9732245 74.9513641,30.0083775 74.9513641,39.4293906 L39.4293906,39.4293906" id="Shape" stroke="#FFFFFF" fill="#CA6014"></path>
+            <path d="M39.4293906,39.4293906 L74.9513641,39.4293906 C74.9513641,48.8504037 71.2088813,57.8855567 64.547219,64.547219 L39.4293906,39.4293906" id="Shape" stroke="#FFFFFF" fill="#F3C716"></path>
+            <path d="M39.4293906,39.4293906 L64.547219,64.547219 C57.8855567,71.2088813 48.8504037,74.9513641 39.4293906,74.9513641 L39.4293906,39.4293906" id="Shape" stroke="#FFFFFF" fill="#227B63"></path>
+            <path d="M39.4293906,39.4293906 L39.4293906,74.9513641 C30.0083775,74.9513641 20.9732245,71.2088813 14.3115623,64.547219 L39.4293906,39.4293906" id="Shape" stroke="#CA5F14"></path>
+            <path d="M39.4293906,39.4293906 L14.3115623,64.547219 C7.64989998,57.8855567 3.90741709,48.8504037 3.90741709,39.4293906 L39.4293906,39.4293906" id="Shape" stroke="#CA5F14"></path>
+            <path d="M39.4293906,39.4293906 L3.90741709,39.4293906 C3.90741709,30.0083775 7.64989998,20.9732245 14.3115623,14.3115623 L39.4293906,39.4293906" id="Shape" stroke="#CA5F14"></path>
+            <path d="M39.4293906,39.4293906 L14.3115623,14.3115623 C20.9732245,7.64989998 30.0083775,3.90741709 39.4293906,3.90741709 L39.4293906,39.4293906" id="Shape" stroke="#CA5F14"></path>
+            <path d="M47.8362577,71.3991668 C65.4926775,71.3991668 79.8060339,57.0858105 79.8060339,39.4293906 C79.8060339,21.7729708 65.4926775,7.45961444 47.8362577,7.45961444 C30.1798378,7.45961444 15.8664815,21.7729708 15.8664815,39.4293906 C15.8664815,57.0858105 30.1798378,71.3991668 47.8362577,71.3991668 Z" id="Oval" fill="#FFFFFF"></path>
+        </g>
+        <g id="ring-colored-smaller" transform="translate(0.000000, 0.253163)">
+            <rect id="Rectangle-path" x="0" y="0" width="129.519076" height="129.519076"></rect>
+            <path d="M64.759538,64.759538 L64.759538,6.41761187 C80.2327788,6.41761187 95.072276,12.5643329 106.01351,23.5055664 L64.759538,64.759538" id="Shape" stroke="#FFFFFF" fill="#007A97"></path>
+            <path d="M64.759538,64.759538 L106.01351,23.5055664 C116.954743,34.4467999 123.101464,49.2862971 123.101464,64.759538 L64.759538,64.759538" id="Shape" stroke="#FFFFFF" fill="#CA6014"></path>
+            <path d="M64.759538,64.759538 L123.101464,64.759538 C123.101464,80.2327788 116.954743,95.072276 106.01351,106.01351 L64.759538,64.759538" id="Shape" stroke="#FFFFFF" fill="#F3C716"></path>
+            <path d="M64.759538,64.759538 L106.01351,106.01351 C95.072276,116.954743 80.2327788,123.101464 64.759538,123.101464 L64.759538,64.759538" id="Shape" stroke="#FFFFFF" fill="#227B63"></path>
+            <path d="M64.759538,64.759538 L64.759538,123.101464 C49.2862971,123.101464 34.4467999,116.954743 23.5055664,106.01351 L64.759538,64.759538" id="Shape" stroke="#007A97"></path>
+            <path d="M64.759538,64.759538 L23.5055664,106.01351 C12.5643329,95.072276 6.41761187,80.2327788 6.41761187,64.759538 L64.759538,64.759538" id="Shape" stroke="#007A97"></path>
+            <path d="M64.759538,64.759538 L6.41761187,64.759538 C6.41761187,49.2862971 12.5643329,34.4467999 23.5055664,23.5055664 L64.759538,64.759538" id="Shape" stroke="#007A97"></path>
+            <path d="M64.759538,64.759538 L23.5055664,23.5055664 C34.4467999,12.5643329 49.2862971,6.41761187 64.759538,6.41761187 L64.759538,64.759538" id="Shape" stroke="#007A97"></path>
+            <path d="M78.5671271,117.267271 C107.566348,117.267271 131.074861,93.7587584 131.074861,64.759538 C131.074861,35.7603175 107.566348,12.2518045 78.5671271,12.2518045 C49.5679067,12.2518045 26.0593937,35.7603175 26.0593937,64.759538 C26.0593937,93.7587584 49.5679067,117.267271 78.5671271,117.267271 Z" id="Oval" fill="#FFFFFF"></path>
+        </g>
+        <rect id="Rectangle" fill="#007A97" x="48.2522048" y="6.1788727" width="240.414494" height="117.667657" rx="8"></rect>
+        <rect id="Rectangle-Copy" fill="#374C51" x="368.24051" y="6.1788727" width="240.414494" height="117.667657" rx="8"></rect>
+        <rect id="Rectangle-Copy-2" fill="#CA5F14" x="692.461465" y="29.8817101" width="240.414494" height="72.8015721" rx="8"></rect>
+        <path d="M644.5,71.423265 L644.5,179.015852" id="Line" stroke="#979797" stroke-linecap="square"></path>
+        <g id="Group" transform="translate(59.257094, 14.644172)" font-size="24" font-family="ArialMT, Arial" fill="#FFFFFF" font-weight="normal">
+            <text id="Cluster">
+                <tspan x="1.42108547e-14" y="22">Cluster</tspan>
+            </text>
+        </g>
+        <g id="Group-Copy" transform="translate(397.022527, 16.337232)" font-size="24" font-family="ArialMT, Arial" fill="#FFFFFF" font-weight="normal">
+            <text id="Session">
+                <tspan x="0" y="22">Session</tspan>
+            </text>
+        </g>
+        <g id="Group-Copy-3" transform="translate(724.000000, 56.000000)" font-weight="normal" font-size="22" font-family="Arial-ItalicMT, Arial" fill="#FFFFFF" font-style="italic">
+            <text id="PreparedStatement">
+                <tspan x="-1.13686838e-13" y="20">PreparedStatement</tspan>
+            </text>
+        </g>
+        <g id="Group-2" transform="translate(347.211177, 69.089436) rotate(-90.000000) translate(-347.211177, -69.089436) translate(320.711177, 5.089436)">
+            <polygon id="Shape" fill="url(#linearGradient-1)" points="13.0396166 0.42448 39.0168682 0.42448 39.0168682 92.59485 52.0054898 92.59485 26.0282466 127.09485 0.0509949617 92.59485 13.0396166 92.59485"></polygon>
+            <polygon id="Shape" stroke="#007A97" stroke-width="3" fill="#CA5F14" points="13.0396166 0.42448 39.0168682 0.42448 39.0168682 92.59485 52.0054898 92.59485 26.0282466 127.09485 0.0509949617 92.59485 13.0396166 92.59485"></polygon>
+            <g id="Group" transform="translate(26.028247, 56.283203) rotate(90.000000) translate(-26.028247, -56.283203) translate(-10.471753, 48.783203)" font-size="13" font-family="CourierNewPS-BoldMT, Courier New" fill="#FFFFFF" font-weight="bold">
+                <text id="connect()">
+                    <tspan x="0.40203462" y="11">connect()</tspan>
+                </text>
+            </g>
+        </g>
+        <g id="Group-2-Copy" transform="translate(657.739072, 70.782496) rotate(-90.000000) translate(-657.739072, -70.782496) translate(631.239072, 6.782496)">
+            <polygon id="Shape" fill="url(#linearGradient-1)" points="13.0396166 0.42448 39.0168682 0.42448 39.0168682 92.59485 52.0054898 92.59485 26.0282466 127.09485 0.0509949617 92.59485 13.0396166 92.59485"></polygon>
+            <polygon id="Shape" stroke="#CA5F14" stroke-width="3" fill="#007A97" points="13.0396166 0.42448 39.0168682 0.42448 39.0168682 92.59485 52.0054898 92.59485 26.0282466 127.09485 0.0509949617 92.59485 13.0396166 92.59485"></polygon>
+            <g id="Group" transform="translate(26.028247, 59.397084) rotate(90.000000) translate(-26.028247, -59.397084) translate(-17.971753, 51.897084)" font-size="13" font-family="CourierNewPS-BoldMT, Courier New" fill="#FFFFFF" font-weight="bold">
+                <text id="prepare(…)">
+                    <tspan x="0.334951991" y="11">prepare(…)</tspan>
+                </text>
+            </g>
+        </g>
+        <g id="Group" transform="translate(78.727281, 38.347009)" font-size="12" font-family="Helvetica" fill="#FFFFFF" font-weight="normal">
+            <text id="•">
+                <tspan x="0" y="11">•</tspan>
+            </text>
+            <text id="Connection-Info">
+                <tspan x="21.1632477" y="11">Connection Info</tspan>
+            </text>
+            <text id="•">
+                <tspan x="0" y="22.8514187">•</tspan>
+            </text>
+            <text id="Options/Policies">
+                <tspan x="21.1632477" y="22.8514187">Options/Policies</tspan>
+            </text>
+            <text id="⁃">
+                <tspan x="30.4750767" y="34.7028374">⁃</tspan>
+            </text>
+            <text id="Load-Balancing,-Retr">
+                <tspan x="41" y="35">Load Balancing, Retry Policies</tspan>
+            </text>
+            <text id="⁃">
+                <tspan x="30.4750767" y="47.400786">⁃</tspan>
+            </text>
+            <text id="Whitelisting-etc.">
+                <tspan x="41" y="47">Whitelisting etc.</tspan>
+            </text>
+            <text id="•">
+                <tspan x="0" y="60.0987347">•</tspan>
+            </text>
+            <text id="Connection-Pool-Conf">
+                <tspan x="21.1632477" y="60.0987347">Connection Pool Config</tspan>
+            </text>
+            <text id="•">
+                <tspan x="0" y="71.9501534">•</tspan>
+            </text>
+            <text id="Query-Options-(Consistency-etc.)">
+                <tspan x="21.1632477" y="71.9501534">Query Options (Consistency etc.)</tspan>
+            </text>
+        </g>
+        <g id="Group-Copy-2" transform="translate(416.492715, 40.040069)" font-size="12" font-family="Helvetica" fill="#FFFFFF" font-weight="normal">
+            <text id="•">
+                <tspan x="0" y="11">•</tspan>
+            </text>
+            <text id="Live-Cluster">
+                <tspan x="21.1632477" y="11">Live Cluster</tspan>
+            </text>
+            <text id="•">
+                <tspan x="0" y="24.5444785">•</tspan>
+            </text>
+            <text id="•">
+                <tspan x="0" y="50.7869057">•</tspan>
+            </text>
+            <text id="•-copy">
+                <tspan x="0" y="38.0889571">•</tspan>
+            </text>
+            <text id="•-copy-3">
+                <tspan x="0" y="64.3313842">•</tspan>
+            </text>
+            <text id="Keyspace">
+                <tspan x="21.1632477" y="24.5444785">Keyspace</tspan>
+            </text>
+            <text id="Multiple-Concurrent">
+                <tspan x="21.1632477" y="50.7869057">Multiple Concurrent Requests</tspan>
+            </text>
+            <text id="Shared-(1-per-applic">
+                <tspan x="21.1632477" y="38.0889571">Shared (1 per application)</tspan>
+            </text>
+            <text id="Connection-Pool">
+                <tspan x="21.1632477" y="64.3313842">Connection Pool</tspan>
+            </text>
+        </g>
+        <use id="Rectangle-2" stroke="#979797" mask="url(#mask-3)" stroke-width="2" xlink:href="#path-2"></use>
+        <text id="insert-into-tbl-(fna" font-family="ArialMT, Arial" font-size="20" font-weight="normal" fill="#374C51">
+            <tspan x="501" y="205">insert into tbl (fname,lname,title)</tspan>
+            <tspan x="501" y="227">values (?,?,?);</tspan>
+        </text>
+    </g>
+</svg>

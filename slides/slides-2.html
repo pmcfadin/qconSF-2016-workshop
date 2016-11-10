@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta content="text/html; charset=" http-equiv="Content-Type" />
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+<meta content="Asciidoctor 1.5.3" name="generator" />
+<title>Core Java: Driver Configuration</title>
+<link href="deck.js/themes/style/font.css" rel="stylesheet" />
+<style>
+.conum { display: inline-block; color: white !important; background-color: #222222; -webkit-border-radius: 100px; border-radius: 100px; text-align: center; width: 1.2em; height: 1.2em; font-size: 0.9em; font-weight: bold; line-height: 1.2; font-family: Arial, sans-serif; font-style: normal; position: relative; top: -0.1em; }
+.conum * { color: white !important; }
+.conum + b { display: none; }
+.conum:after { content: attr(data-value); }
+.conum:not([data-value]):empty { display: none; }
+.colist table td:first-of-type { padding-right: 0.25em; }
+</style>
+<style>
+/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top;line-height:1.45}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
+<link href="deck.js/core/deck.core.css" rel="stylesheet" />
+<link href="deck.js/extensions/scale/deck.scale.css" media="screen" rel="stylesheet" />
+<link href="deck.js/extensions/goto/deck.goto.css" media="screen" rel="stylesheet" />
+<link href="deck.js/themes/style/datastax.css" media="screen" rel="stylesheet" />
+<link href="deck.js/themes/transition/fade.css" media="screen" rel="stylesheet" />
+<link href="deck.js/core/print.css" media="print" rel="stylesheet" />
+<script src="deck.js/modernizr.custom.js"></script>
+</head>
+<body class="article">
+<div class="deck-container">
+<section class="slide" id="title-slide">
+<h1>Core Java: Driver Configuration</h1>
+</section>
+<section class="slide transition-blue" id="courses-DS420-components-sections-java-driver-config-core-java-intro">
+<h2>Core Java - Part 1 - Driver Configuration</h2>
+
+</section>
+<section class="slide transition-green" id="java-driver-intro">
+<h2>Java Driver Intro</h2>
+
+</section>
+<section class="slide" id="intro-to-the-java-driver">
+<h2>Intro to the Java Driver</h2>
+<div class="ulist">
+<ul>
+<li>Provides a way to connect to your Cassandra cluster</li>
+<li>Allows querying Cassandra data using CQL</li>
+<li>Similar to executing SQL with JDBC</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java"><span class="predefined-type">ResultSet</span> rs = session.execute(<span class="string"><span class="delimiter">&quot;</span><span class="content">SELECT * FROM t1</span><span class="delimiter">&quot;</span></span>);
+Row firstRow = rs.one();
+<span class="type">int</span> col1 = firstRow.getInt(<span class="string"><span class="delimiter">&quot;</span><span class="content">c1</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">String</span> col2 = firstRow.getString(<span class="string"><span class="delimiter">&quot;</span><span class="content">c2</span><span class="delimiter">&quot;</span></span>);</code></pre>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li>Provides annotations that provide object mapping similar to JPA</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java"><span class="directive">public</span> <span class="type">class</span> <span class="class">Video</span> {
+    <span class="annotation">@PartitionKey</span>
+    <span class="annotation">@Column</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">year</span><span class="delimiter">&quot;</span></span>)
+    <span class="directive">private</span> <span class="type">int</span> year;
+
+    <span class="annotation">@ClusteringColumn</span>
+    <span class="annotation">@Column</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">title</span><span class="delimiter">&quot;</span></span>)
+    <span class="directive">private</span> string title;
+
+    <span class="annotation">@ClusteringColumn</span>
+    <span class="annotation">@Column</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">video_id</span><span class="delimiter">&quot;</span></span>)
+    <span class="directive">private</span> <span class="predefined-type">UUID</span> videoId;
+
+    <span class="annotation">@Column</span>(name=<span class="string"><span class="delimiter">&quot;</span><span class="content">runtime</span><span class="delimiter">&quot;</span></span>)
+    <span class="directive">private</span> <span class="type">int</span> runtime;
+    ...
+}</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="jdbc-compliance">
+<h2>JDBC Compliance</h2>
+<div class="paragraph"><p><strong>NOT JDBC Compliant</strong></p></div>
+<div class="ulist">
+<ul>
+<li>A JDBC driver</li>
+<li>Is not JCA compliant</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Currently there is no plan to make this driver JCA compliant. This implies more tied to Java SE than to EE.</p></div>
+<div class="paragraph"><p>JCA stands for Java Connected Architecture. It&#8217;s a standard as to how Java connects to other technologies. JDBC is JCA compliant driver that connects to a relational database.</p></div>
+<div class="paragraph"><p>JCA drivers have several configurable settings such as thread pool size, timeouts, windows sockets timeouts, etc. But the Cassandra driver has to be able to communicate with several nodes, not just a single sever. Cassandra is a distributed database. When you&#8217;re talking to a master architecture like an Oracle server, Postgress, JMS, etc. those are not distributed systems. Those systems have a master which the driver communicates with and can have failover. With a JDBC driver, you set how many threads with this timeout, what happens? It opens a socket, based upon the threads and the number of connections in the pool to your server and leaves that socket open. That&#8217;s fine when you&#8217;re talking to one or two servers. With Cassandra, if we have 1,000 nodes and we specify we want a thread pool of 10, how do we open and leave open a socket to 1,000 servers when we can only have 10 connections? This whole concept of managing sockets and thread pools takes on a whole new meaning with a distributed computing environment.</p></div>
+<div class="paragraph"><p>This is pure speculation. For details on this see mailing list comment: <a class="bare" href="https://groups.google.com/a/lists.datastax.com/forum/\#!topic/java-driver-user/-im4eN_yZbA">https://groups.google.com/a/lists.datastax.com/forum/\#!topic/java-driver-user/-im4eN_yZbA</a></p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="documentation">
+<h2>Documentation</h2>
+<div class="paragraph"><p><strong>Use it. Abuse it.</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Thorough documentation at <a class="bare" href="http://docs.datastax.com/en/drivers/java/3.0/">http://docs.datastax.com/en/drivers/java/3.0/</a></li>
+<li>Quick start guide: <a class="bare" href="https://datastax.github.io/java-driver/manual/">https://datastax.github.io/java-driver/manual/</a></li>
+<li>Code at <a class="bare" href="https://github.com/datastax/java-driver">https://github.com/datastax/java-driver</a></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>As usual, we are not going to cover all the driver options nor all the ways in which you can use the driver. We have thorough documentation online that covers this, and here are the core links.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="driver-languages">
+<h2>Driver Languages</h2>
+<div class="ulist">
+<ul>
+<li>DataStax develops and maintains drivers in several languages</li>
+<li>Several community supported drivers are available as well</li>
+<li><a class="bare" href="http://www.planetcassandra.org/apache-cassandra-client-drivers">http://www.planetcassandra.org/apache-cassandra-client-drivers</a></li>
+<li>DataStax drivers maintain consistent APIs and policies across languages</li>
+<li>We will study the DataStax Java driver</li>
+<li>But the concepts hold true for other DataStax drivers</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="outline-for-java-sections">
+<h2>Outline for Java Sections</h2>
+<div class="ulist">
+<ul>
+<li><p>
+Part 1: Configuring the driver<div class="ulist">
+<ul>
+<li>Start with the base cluster object</li>
+<li>Break down into the detailed configuration options</li>
+</ul>
+</div></p></li>
+<li><p>
+Part 2: Raw execution and statements<div class="ulist">
+<ul>
+<li>Executing CQL code - much like raw SQL</li>
+<li>Moving into statements and how to use</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>We will progress through the easiest "hello world" type of functionality using Cassandra drivers to execute raw CQL statements.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+Part 3: Annotation and Mapping<div class="ulist">
+<ul>
+<li>Simplifying object mapping</li>
+<li>JPA like interface with Annotations</li>
+</ul>
+</div></p></li>
+<li><p>
+Part 4: Best practices for:<div class="ulist">
+<ul>
+<li>Time-series</li>
+<li>Tombstones</li>
+<li>Transactions</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>After warming up executing raw CQL statements, we will master the preferred method of using annotations to map our Java classes to CQL tables. This is similar to JPA, if you have experience with that. We tag our POJO classes with annotations to describe how our classes map to CQL tables. These embedded annotations are convenient and take care of the plumbing for you.</p></div>
+<div class="paragraph"><p>In some cases where you&#8217;re trying to pull/push data quick and dirty from/to Cassandra, executing raw CQL statements may make sense. But if you use them for a lot of your core enterprise work, you&#8217;ll find that you are writing a lot of boiler-plate code.</p></div>
+<div class="paragraph"><p>After we examine the DataStax driver annotation feature, we will compare it with JPA to see the similarities and differences with a technology you may already know.</p></div>
+<div class="paragraph"><p>And because this class isn&#8217;t just about writing Java code, we will examine use case scenarios such as: how to deal with time series data in Cassandra, how we work with tombstones and what are the best practices around tombstones, and also working with transactions in Cassandra. Many developers claim they can&#8217;t migrate to a NoSQL database like Cassandra because they need ACID compliance. Many Cassandra users are in the financial market which generally requires ACID compliance. We will discuss this in more detail later in the course.</p></div>
+<div class="paragraph"><p>In general, all this material will take up the first 2.5 days of the course.</p></div>
+</div>
+</div>
+</section>
+<section class="slide transition-green" id="courses-DS420-components-sections-java-driver-config-create-cluster-object">
+<h2>Cassandra Cluster Objects</h2>
+
+</section>
+<section class="slide" id="cassandra-cluster">
+<h2>Cassandra Cluster</h2>
+<div class="imageblock" style="float: right">
+<div class="content">
+<img alt="key driver objects" src="images/courses/DS420/components/sections/java-driver-config/create-cluster-object/key-driver-objects.svg" />
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>The <code>Cluster</code> object represents a cluster of nodes</li>
+<li><p>
+Many key settings such as:<div class="ulist">
+<ul>
+<li>Load balancing</li>
+<li>Failover</li>
+<li>Connection pooling</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Since Cassandra is a distributed database, we configure options on <code>Cluster</code> object that we don&#8217;t need to consider with a typical relational database driver such as load balancing, failover, and connection pooling.</p></div>
+<div class="paragraph"><p>From a high level, you create a <code>Cluster</code> which you then use to create a <code>Session</code>. This diagram shows some of the configurations you can set on the respective types. Some of the same settings can be set on either one.</p></div>
+<div class="paragraph"><p>Try to keep to having only one instance of each to reduce overhead. One scenario where it makes sense to have more than one is if you have a separate Spark and/or Solr data centers. Then you would make a Cluster+Session pair for each cluster. Another area where it may make sense is if you need different configurations/policies depending on your use case.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="creating-a-cluster-object">
+<h2>Creating a Cluster Object</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java">Cluster cluster = Cluster.builder()
+    .addContactPoints(&lt;some hosts&gt;)
+    <span class="comment">// ... other configuration ...</span>
+    .build();</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>The driver discovers the nodes within a cluster by asking <strong>contact points</strong></li>
+<li>You provide these <strong>contact points</strong> as <strong>IP addresses</strong> when building a <strong>Cluster</strong> object</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>At the most basic level, creating a <code>Cluster</code> object is a matter of specifying one or more contact points and calling <code>build()`</code>. The more contact points you have, the less chance of failure. If you only have one contact point, and that node goes down, then the driver will error.</p></div>
+<div class="paragraph"><p>We suggest having your seed nodes from your <code>cassandra.yaml</code> file to act as your contact points. Generally your Cassandra client is a web server sitting in front of your data store. Thus you won&#8217;t have thousands of clients pounding your seed nodes (like a mobile phone or laptop computer). If a seed node starts to bog down as reported in OpsCenter, and your driver starts having issues too, it&#8217;s easy to pinpoint the problem back to that particular seed node. Thus debugging is easier because all are configured for the same seed nodes. However, having your contact points be seed nodes is not required.</p></div>
+<div class="paragraph"><p>Of course, hard coding your seed nodes is less ideal. Hopefully you put these configurations in a properties file.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="session">
+<h2>Session</h2>
+<div class="paragraph"><p>And finally you create a session:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java">Session session = cluster.connect(&lt;keyspace name&gt;);</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="cluster-builder">
+<h2>Cluster.builder()</h2>
+<div class="paragraph"><p><strong>Provides common configuration options through a fluent interface</strong></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java">Cluster cluster = Cluster.builder()
+     .addContactPoints(<span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.2</span><span class="delimiter">&quot;</span></span>)
+     .withLoadBalancingPolicy( ... )
+     .withRetryPolicy( ... )
+     .withReconnectionPolicy( ... )
+     .withPoolingOptions( ... )
+     .withQueryOptions( ... )
+     .build()</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>Made possible by every function returning <strong>this</strong></li>
+<li>All have defaults, so pick and choose</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+We can check the options once the cluster` is built via cluster.getConfiguration()`
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Configuration:
+<a class="bare" href="http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/Configuration.html">http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/Configuration.html</a>
+Various policies:
+<a class="bare" href="http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/policies/Policies.Builder.html">http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/policies/Policies.Builder.html</a></p></div>
+<div class="paragraph"><p>Good way to learn the default values is to build a <strong>Cluster</strong> object and call getConfiguration() to read the value.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="cluster-configuration">
+<h2>Cluster Configuration</h2>
+<div class="paragraph"><p>Lots of options with <strong>Cluster</strong> object</p></div>
+<div class="ulist">
+<ul>
+<li><p>
+Policies<div class="ulist">
+<ul>
+<li>Load balancing</li>
+<li>Protocol</li>
+<li>Retry</li>
+<li>Reconnection</li>
+</ul>
+</div></p></li>
+<li>ProtocolOptions</li>
+<li>PoolingOptions</li>
+<li>SocketOptions</li>
+<li>MetricOptions</li>
+<li>QueryOptions</li>
+</ul>
+</div>
+<div class="paragraph"><p>We cover these as the course progresses.</p></div>
+</section>
+<section class="slide" id="minimize-cluster-instances">
+<h2>Minimize Cluster Instances</h2>
+<div class="ulist">
+<ul>
+<li>Ideally your <strong>Cluster</strong> and <strong>Session</strong> objects are both singletons</li>
+</ul>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+An application should have <strong>only 1</strong> session object for the Cassandra workload, and possibly another one for the SOLR workload.
+</td>
+</tr>
+</table>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Ideally your application will have one Cluster and one Session instance. Cluster and Session objects have overhead, and only having one instance of each minimizes that overhead. In reality, however, you will most likely have one Cluster instance and three(ish) Session instances: one for the SOLR only nodes (which you have to do for SOLR), one for Spark jobs, and one for your Cassandra data store. This depends on your application and use case.</p></div>
+</div>
+</div>
+</section>
+<section class="slide transition-azure" id="courses-DS420-components-exercises-java-driver-config-cassandra-session">
+<h2>Exercise: Session Object</h2>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+<span class="blue">Create</span><div class="ulist">
+<ul>
+<li>Create the <code>killrvideo</code> keyspace</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="red">Code</span><div class="ulist">
+<ul>
+<li>Navigate to the file <code>CassandraSession.java</code></li>
+<li>Given a hostname, user, password and keyspace, create a session object and store it in the field <code>session</code></li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="green">Test</span><div class="ulist">
+<ul>
+<li>Run the test class <code>CassandraSessionTest</code></li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="purple">Run</span><div class="ulist">
+<ul>
+<li>Ensure the UI comes up</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide transition-green" id="courses-DS420-components-sections-java-driver-config-load-balancing-options">
+<h2>Load Balancing Options</h2>
+
+</section>
+<section class="slide" id="load-balancing-options">
+<h2>Load Balancing Options</h2>
+<div class="ulist">
+<ul>
+<li>Load balancers chooses which node coordinates a request</li>
+<li>Maintains a pulse on hosts up/down state</li>
+<li>Excludes downed hosts from query plans</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="default-load-balancing">
+<h2>Default Load Balancing</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java"><span class="keyword">new</span> TokenAwarePolicy(<span class="keyword">new</span> DCAwareRoundRobinPolicy(<span class="string"><span class="delimiter">&quot;</span><span class="content">local-dc-name</span><span class="delimiter">&quot;</span></span>))</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>Chainable and nestable policy</li>
+<li><strong>DCAwareRoundRobinPolicy</strong> string argument determines "closest" data center</li>
+<li><strong>TokeAwarePolicy</strong> targets nodes responsible for a given token</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Assume a replication factor of three within a 1,000 node cluster, When you read or write data; the <strong>TokenAwarePolicy</strong> targets one of those nodes responsible for the token of interest to act as the coordinator for the request. This minimizes the number of nodes involved by avoiding unnecessary hops.</p></div>
+<div class="paragraph"><p>The <strong>DCAwareRoundRobinPolicy</strong> favors nodes in the closest data center. You specify the closest data center as an argument to the <code>DCAwareRoundRobinPolicy</code> constructor. For example, a query in the UK should favor a DC in France rather than in the americas. If you don&#8217;t specify the closest data center, <code>DCAwareRoundRobinPolicy</code> will eventually derive which data center is geographically closest. However, the driver will failover to a farther away data center if necessary. If all your data centers are co-located, and one is acting as your SOLR data center, and another is your Spark datacenter, and the last is your data store, <code>DCAwareRoundRobinPolicy</code> won&#8217;t successfully recognize which one you have designated as your data store. In that case, you want to be explicit.</p></div>
+<div class="paragraph"><p>Round robin evenly distributes the requests amongst all nodes with that token in that data center to avoid hot-spotting a given node.</p></div>
+<div class="paragraph"><p>A load balancing policy&#8217;s <strong>tracking</strong> of nodes is determined by its implementation of the Host.StateListener` interface.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="dcawareroundrobinpolicy">
+<h2>DCAwareRoundRobinPolicy</h2>
+<div class="ulist">
+<ul>
+<li><p>
+<code>distance(Host)</code> returns the "distance" of a host for that balancing policy<div class="ulist">
+<ul>
+<li>Returns <code>HostDistance</code> enum value</li>
+<li><code>IGNORED</code>, <code>LOCAL</code>, <code>REMOTE</code></li>
+</ul>
+</div></p></li>
+<li><p>
+<code>newQueryPlan(String, Statement)</code>: returns a sequence of hosts to handle the query (in order or preference)<div class="ulist">
+<ul>
+<li>Local hosts first</li>
+<li>Failover hosts (possibly in other data centers) next</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p><code>HostDistance</code> is a simple enum with three values: IGNORED (for WhiteList), LOCAL, and REMOTE.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="loadbalancingpolicy-classes">
+<h2>LoadBalancingPolicy Classes</h2>
+<div class="ulist">
+<ul>
+<li><code>DCAwareRoundRobinPolicy</code></li>
+<li><code>LatencyAwarePolicy</code></li>
+<li><code>RoundRobinPolicy</code></li>
+<li><code>TokenAwarePolicy</code></li>
+<li><p>
+<code>WhiteListPolicy</code><div class="ulist">
+<ul>
+<li><code>HostFilterPolicy</code>, super of <code>WhiteListPolicy</code></li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="paragraph notes"><p>For more information see the java driver documentation:
+<a class="bare" href="http://datastax.github.io/java-driver/manual/load_balancing/">http://datastax.github.io/java-driver/manual/load_balancing/</a></p></div>
+</section>
+<section class="slide" id="choosing-one">
+<h2>Choosing One</h2>
+<div class="ulist">
+<ul>
+<li>In cases where the default connectivity may not work, choose a different strategy</li>
+<li><code>TokenAware</code> wraps another policy as the driver can not always determine the token</li>
+</ul>
+</div>
+<div class="ulist notes">
+<ul>
+<li>TokenAware finds replicas and then round-robinS between them to avoid hotspots</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="load-balancing-options-2">
+<h2>Load Balancing Options</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java">RoundRobin                            <span class="comment">// Um, nope.</span>
+DCAwareRoundRobin(&lt;optional DC name&gt;) <span class="comment">// Pick the closest DC</span>
+TokenAware(&lt;nested LB here&gt;)          <span class="comment">// Target actual node with data</span>
+WhiteList(&lt;nested LB here&gt;, [hosts])  <span class="comment">// Restrict to the specified hosts</span>
+HostFilter(&lt;nested LB here&gt;)          <span class="comment">// Super class of WhiteList, use WhiteList</span>
+LatencyAware                          <span class="comment">// Defines acceptable latencies</span></code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Given the distribution of tokens in a Cassandra cluster using <code>RoundRobin</code> alone is sub-optimal as it simply circulates the cluster to avoid hotspots. But <code>RoundRobin</code> doesn&#8217;t intelligently choose coordinator nodes which contain the actual data.</p></div>
+<div class="paragraph"><p>WhiteList is useful for testing purposes or potentially where you have network restrictions between your client and your cluster, though this should be used with caution. For example, if your application connects directly to the cluster from the client phone/laptop/desktop instead of having an application server, then you may only want to expose only certain nodes through your firewall. You can then specify those nodes in the WhiteList for the client device to connect to.</p></div>
+<div class="paragraph"><p><code>LatencyAware</code> is sensitive to coordinator node response times. You can configure the max response time, etc.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="chaining-load-balancers">
+<h2>Chaining Load Balancers</h2>
+<div class="paragraph"><p>Policies can chain:</p></div>
+<div class="ulist">
+<ul>
+<li><code>LatencyAwarePolicy</code></li>
+<li><code>TokenAwarePolicy</code></li>
+<li><code>WhiteListPolicy</code></li>
+</ul>
+</div>
+<div class="paragraph"><p>Non chainable policies:</p></div>
+<div class="ulist">
+<ul>
+<li><code>RoundRobinPolicy</code></li>
+<li><code>DCAwareRoundRobinPolicy</code></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Generally you pick one chainable policy and nest it in a non chainable policy. It doesn&#8217;t make sense to combine <code>LatencyAwarePolicy</code> and <code>TokenAwarePolicy</code> because they have different priorities.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="latencyawarepolicy-example">
+<h2>LatencyAwarePolicy Example</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java">LatencyAwarePolicy latencyAwarePolicy =
+   LatencyAwarePolicy.builder(<span class="keyword">new</span> RoundRobinPolicy())
+      .withMininumMeasurements(<span class="integer">5</span>)
+      .withScale(scale, <span class="predefined-type">TimeUnit</span>.MILLISECONDS)
+      .build();
+...
+
+Cluster cluster = Cluster.builder()
+      .withLoadBalancingPolicy(latencyAwarePolicy)
+      .build();</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li><code>withMininumMeasurements()</code> affects number of necessary measurements before penalizing nodes</li>
+<li><code>withScale()</code> determines how much weight new measurements contribute to the average</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>The point of this class is not to memorize all the settings for all the drivers, but instead you should be familiar with the core possibilities and understand where to look to read more.</p></div>
+<div class="paragraph"><p>withMininumMeasurements(): <a class="bare" href="http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/policies/LatencyAwarePolicy.Builder.html#withMininumMeasurements-int-">http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/policies/LatencyAwarePolicy.Builder.html#withMininumMeasurements-int-</a></p></div>
+<div class="paragraph"><p>withScale(): <a class="bare" href="http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/policies/LatencyAwarePolicy.Builder.html#withScale-long-java.util.concurrent.TimeUnit-">http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/policies/LatencyAwarePolicy.Builder.html#withScale-long-java.util.concurrent.TimeUnit-</a></p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="tokenawarepolicy-example">
+<h2>TokenAwarePolicy Example</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java">TokenAwarePolicy tokenAware =
+    <span class="keyword">new</span> TokenAwarePolicy(<span class="keyword">new</span> RoundRobinPolicy(), <span class="predefined-constant">true</span>);
+...
+Cluster cluster = Cluster.builder()
+      .withLoadBalancingPolicy(tokenAware)
+      .build();</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><code>TokenAwarePolicy</code> constructor:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java"><span class="directive">public</span> TokenAwarePolicy(LoadBalancingPolicy childPolicy,
+                        <span class="type">boolean</span> shuffleReplicas)</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li><code>shuffleReplicas</code> shuffles the tokens when contacting hosts possessing replicas</li>
+<li>This shuffling better distributes writes and can alleviate hotspots caused by large partitions</li>
+<li>However, shuffling may decrease the effectiveness of caching</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>Shuffling could decrease effectiveness of caching. Hitting different servers means each one will have to cache individually. Since it retrieves <strong>any</strong> replica (not just the replica in the "primary" token range) but over time it <strong>may</strong> actually improve caching.</li>
+<li><a class="bare" href="http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/policies/TokenAwarePolicy.html">http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/policies/TokenAwarePolicy.html</a></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide" id="whitelistpolicy">
+<h2>WhiteListPolicy</h2>
+<div class="paragraph"><p><strong>Lists nodes that are OK to contact</strong></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java"><span class="predefined-type">List</span>&lt;<span class="predefined-type">InetSocketAddress</span>&gt; whiteList = &lt;socket addresses&gt;;
+WhiteListPolicy whitelistPolicy =
+    <span class="keyword">new</span> WhiteListPolicy(<span class="keyword">new</span> RoundRobinPolicy(),
+      whiteList);
+...
+Cluster cluster = Cluster.builder()
+      .addContactPoints(<span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.2</span><span class="delimiter">&quot;</span></span>)
+      .withLoadBalancingPolicy(whitelistPolicy)
+      .build();</code></pre>
+</div>
+</div>
+<div class="paragraph"><p>For more information see the docs:</p></div>
+<div class="ulist">
+<ul>
+<li><a class="bare" href="http://docs.datastax.com/en/developer/java-driver/3.0/common/drivers/reference/tuningPolicies_c.html">http://docs.datastax.com/en/developer/java-driver/3.0/common/drivers/reference/tuningPolicies_c.html</a></li>
+</ul>
+</div>
+</section>
+<section class="slide transition-green" id="courses-DS420-components-sections-java-driver-config-failover-options">
+<h2>Failover and Recovery</h2>
+
+</section>
+<section class="slide" id="failover-and-recovery">
+<h2>Failover and Recovery</h2>
+<div class="ulist">
+<ul>
+<li>Failover and recovery options determine behavior when a node fails or becomes unreachable</li>
+<li>The driver uses <strong>retry</strong> and <strong>reconnection</strong> policies to handle such situations</li>
+<li>Specify policies when building a <code>Cluster</code> object</li>
+<li>Driver automatically and transparently tries other nodes</li>
+<li>Schedules reconnections to the dead nodes in the background</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java">Cluster cluster = Cluster.builder()
+       .addContactPoints(<span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.1</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">127.0.0.2</span><span class="delimiter">&quot;</span></span>)
+       .withRetryPolicy( ... )
+       .withReconnectionPolicy( ... )
+       .build()</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="failure-conditions">
+<h2>Failure Conditions</h2>
+<div class="paragraph"><p>Retry policies determine two things:</p></div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+Whether an attempt to retry is made
+</li>
+<li>
+What is the consistency level of that attempt
+</li>
+</ol>
+</div>
+</section>
+<section class="slide" id="failure-conditions-2">
+<h2>Failure Conditions</h2>
+<div class="paragraph"><p><strong>Key functions retry policies override</strong></p></div>
+<div class="ulist">
+<ul>
+<li><code>onReadTimeout()</code></li>
+<li><code>onWriteTimeout()</code></li>
+<li><code>onUnavailable()</code></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="available-retry-policies">
+<h2>Available Retry Policies</h2>
+<div class="ulist">
+<ul>
+<li><code>DefaultRetryPolicy</code></li>
+<li><code>DowngradingConsistencyRetryPolicy</code></li>
+<li><code>FallthroughRetryPolicy</code></li>
+<li><code>LoggingRetryPolicy</code></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Generally the <code>DefaultRetryPolicy</code> is fine. It simply retries the read or write.</p></div>
+<div class="paragraph"><p><code>LoggingRetryPolicy</code> is a wrapper policy, so we can log every time we do a retry on top of our normal retry behavior.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="defaultretrypolicy">
+<h2>DefaultRetryPolicy</h2>
+<div class="paragraph"><p>Retries in two cases:</p></div>
+<div class="ulist">
+<ul>
+<li>Read timeout: enough replicas replied but data was not retrieved</li>
+<li>Write timeout: timeout while writing to the distributed log used by batch statements</li>
+</ul>
+</div>
+<div class="paragraph"><p>This retry policy is conservative</p></div>
+<div class="ulist">
+<ul>
+<li>Does not change consistency level on retry</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="downgrading">
+<h2>Downgrading</h2>
+<div class="paragraph"><p><strong>DowngradingConsistencyRetryPolicy</strong></p></div>
+<div class="paragraph"><p>A retry policy that <em>sometimes</em> retries with a lower consistency level than the one initially requested</p></div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+By doing so, it may break consistency guarantees!
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>Don&#8217;t use it. It&#8217;s there, but don&#8217;t use it.</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>In short, if your situation can handle a lower consistency policy, just request that lower policy instead of requesting for something higher and then downgrading upon failure.</p></div>
+<div class="paragraph"><p>If you use this retry policy, there are cases where a read at QUORUM may not see a preceding write at QUORUM. Do not use this policy unless you have understood the cases where this can happen and are OK with that. It is also highly recommended to always wrap this policy into LoggingRetryPolicy to log the occurrences of such consistency downgrades.</p></div>
+<div class="paragraph"><p>This policy is present for historical reasons. In general (nearly always), pay no attention to it.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="fallthroughretrypolicy">
+<h2>FallthroughRetryPolicy</h2>
+<div class="ulist">
+<ul>
+<li>Will never retry (nor ignore)</li>
+<li>All methods invoke <code>RetryPolicy.RetryDecision.rethrow()</code></li>
+<li>Thus it is on you catch the error and implement retry logic in your application&#8217;s business logic</li>
+<li>Better design to write your own retry policy at that point</li>
+<li>Implement <code>IRetryPolicy</code></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="loggingretrypolicy">
+<h2>LoggingRetryPolicy</h2>
+<div class="ulist">
+<ul>
+<li>Wraps another policy</li>
+<li>Logs the decision made by its sub-policy</li>
+<li>Only logs the IGNORE and RETRY decisions</li>
+<li>RETHROW exceptions naturally propagate through</li>
+<li>Logs at threshold INFO</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="reconnection-policies">
+<h2>Reconnection Policies</h2>
+<div class="paragraph"><p><strong>Determines how often to attempt a reconnection</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:33%" />
+<col style="width:66%" />
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>ConstantReconnectionPolicy</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Waits a constant time between each attempt</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>ExponentialReconnectionPolicy</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Waits exponentially longer between each attempt (up to max)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Eventually, <strong>ExponentialReconnectionPolicy</strong> will reach a maximum delay time. Further attempts will cap out at that time length.</p></div>
+<div class="paragraph"><p>The default <code>ExponentialReconnectionPolicy</code> policy is usually adequate</p></div>
+<div class="paragraph"><p><a class="bare" href="http://docs.datastax.com/en/developer/java-driver/3.0/common/drivers/reference/tuningPolicies_c.html">http://docs.datastax.com/en/developer/java-driver/3.0/common/drivers/reference/tuningPolicies_c.html</a></p></div>
+<div class="paragraph"><p>General: <a class="bare" href="http://docs.datastax.com/en/developer/java-driver/3.0/common/drivers/reference/automaticFailover_r.html">http://docs.datastax.com/en/developer/java-driver/3.0/common/drivers/reference/automaticFailover_r.html</a></p></div>
+<div class="paragraph"><p>Helps to look at the code: <a class="bare" href="https://github.com/tfredrich/cassandra-java-driver/blob/master/driver-core/src/main/java/com/datastax/driver/core/policies/ExponentialReconnectionPolicy.java">https://github.com/tfredrich/cassandra-java-driver/blob/master/driver-core/src/main/java/com/datastax/driver/core/policies/ExponentialReconnectionPolicy.java</a></p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="push-notification">
+<h2>Push Notification</h2>
+<div class="ulist">
+<ul>
+<li>Driver can receive notifications of a node state changing to <code>UP</code></li>
+<li>The <code>ReconnectionSchedule</code> on that node is cancelled.</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="control-host">
+<h2>Control Host</h2>
+<div class="ulist">
+<ul>
+<li>Drivers keep a special connection open to a single host</li>
+<li>This is called the <em>Control Host</em></li>
+<li>Driver can choose any node as the control host</li>
+<li>Driver can change control host if current host goes down</li>
+<li><p>
+Control host sends notifications to the driver concerning cluster metadata such as:<div class="ulist">
+<ul>
+<li>Schema</li>
+<li>Token assignment</li>
+<li>Node health</li>
+<li>Etc.</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide transition-green" id="courses-DS420-components-sections-java-driver-config-connection-options-pooling">
+<h2>Connection Options &amp; Pooling</h2>
+
+</section>
+<section class="slide" id="connection-options-pooling">
+<h2>Connection Options &amp; Pooling</h2>
+<div class="ulist">
+<ul>
+<li>Session maintains a connection pool for each <code>UP</code> node</li>
+<li><code>IGNORED</code> distance nodes not included</li>
+<li>Single connection handles several concurrent requests</li>
+<li>Connection pool grows and shrinks as necessary</li>
+</ul>
+</div>
+<div class="imageblock center">
+<div class="content">
+<img alt="SessionCreation" height="200px" src="images/courses/DS420/components/sections/java-driver-config/connection-options-pooling/SessionCreation.svg" />
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Good resource: <a class="bare" href="https://datastax.github.io/java-driver/manual/pooling/">https://datastax.github.io/java-driver/manual/pooling/</a></p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="configuring-pooling">
+<h2>Configuring Pooling</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="java language-java">Cluster cluster =
+  Cluster.builder()
+    .addContactPoints(<span class="string"><span class="delimiter">&quot;</span><span class="content">localhost</span><span class="delimiter">&quot;</span></span>)
+    .withPoolingOptions(<span class="keyword">new</span> PoolingOptions()
+      .setConnectionsPerHost(HostDistance.LOCAL, <span class="integer">1</span>, <span class="integer">4</span>)
+      .setMaxRequestsPerConnection(HostDistance.LOCAL, <span class="integer">800</span>)
+      .setNewConnectionThreshold(HostDistance.LOCAL, <span class="integer">100</span>))
+    .build();</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li><strong>PoolingOptions</strong> instance sets the pooling options</li>
+<li>Several options available</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Pooling options found at: <a class="bare" href="http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/PoolingOptions.html">http://docs.datastax.com/en/drivers/java/3.0/com/datastax/driver/core/PoolingOptions.html</a></p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="host-connection-pool">
+<h2>Host Connection Pool</h2>
+<div class="ulist">
+<ul>
+<li><strong>Core</strong> - baseline number of established connections</li>
+<li><strong>Max</strong> - number of connections determines the limit</li>
+<li><strong>Grows</strong> when connections max out their request limit</li>
+<li><strong>Shrinks</strong> as connections are idle for a period of time</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="ulist">
+<ul>
+<li><a class="bare" href="http://docs.datastax.com/en/developer/java-driver/3.0/java-driver/reference/ConnectionRequirements_r.html">http://docs.datastax.com/en/developer/java-driver/3.0/java-driver/reference/ConnectionRequirements_r.html</a></li>
+<li><a class="bare" href="http://datastax.github.io/java-driver/features/pooling/">http://datastax.github.io/java-driver/features/pooling/</a></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="slide" id="pooling-options">
+<h2>Pooling Options</h2>
+<div class="paragraph"><p><strong>Critical Settings</strong></p></div>
+<div class="ulist">
+<ul>
+<li><code>setCoreConnectionsPerHost()</code> - number of core connections</li>
+<li><code>setMaxConnectionsPerHost()</code> - number of max connections</li>
+<li><code>setConnectionsPerHost()</code> - convenience function that invokes functions above</li>
+<li><code>setMaxRequestsPerConnection()</code> - determines max number of concurrent requests per connection</li>
+<li><code>setNewConnectionThreshold()</code> - number of remaining requests until all connections are maxed out</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Notice we set the number of connections <strong>per host</strong> rather than an overall number of connections for our cluster. As you add/remove hosts, the number of connections to your cluster will grow/shrink as well.</p></div>
+<div class="paragraph"><p><code>setNewConnectionThreshold()</code> sets the number of remaining requests until all the connections are full. So instead of creating a new connection when all the other connections are maxed out, we can prep ahead of time with a fresh connection before we hit the max.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="terminating-connections">
+<h2>Terminating Connections</h2>
+<div class="ulist">
+<ul>
+<li>Idle connections placed in a temporary recycling area</li>
+<li>Recycled connections can be revived if load increases</li>
+<li>Recycled connections closed if unused for a period of time</li>
+<li>Configurable via <code>setIdleTimeoutSeconds()</code></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="configuring-your-own-pool">
+<h2>Configuring Your Own Pool</h2>
+<div class="paragraph"><p><strong>It all depends.</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Processor(s)</li>
+<li>Memory</li>
+<li>Network bandwidth</li>
+<li><strong>Data model</strong></li>
+<li><strong>Queries</strong></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Your data model will, by far, affect driver performance. You may have large partitions (gigabytes) vs. small partitions (kilobytes). You may be storing binary data or native data types. You may have user defined types as well.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="tuning-your-connections">
+<h2>Tuning Your Connections</h2>
+<div class="ulist">
+<ul>
+<li>Running <code>cassandra-stress</code> against <strong>your data model</strong> is a good first tuning step</li>
+<li>Requires a custom cassandra-stress yaml config file</li>
+<li>Make sure to specify the read to write ratio that reflects your usage</li>
+<li>Do not set number of threads</li>
+<li>This has <code>cassandra-stress</code> run with a slow ramp up of threads</li>
+<li>It will keep ramping up until it improvement speed starts to go negative</li>
+<li>Interpret these results to use as the baseline for setting up your connection pools</li>
+<li><strong>Don&#8217;t forget</strong> to further tune when you run stress tests with more realistic loads</li>
+<li>The item to note is the 'Improvement over x threadCount: nn%'</li>
+</ul>
+</div>
+</section>
+<div aria-role="navigation">
+<a class="deck-prev-link" href="#" title="Previous">
+<i class="icon-chevron-with-circle-left"></i>
+</a>
+<a class="deck-next-link" href="#" title="Next">
+<i class="icon-chevron-with-circle-right"></i>
+</a>
+</div>
+<form action="." class="goto-form" method="get">
+<label for="goto-slide">Go to Slide:</label>
+<input id="goto-slide" list="goto-datalist" name="slidenum" type="text" />
+<datalist id="goto-data-list"></datalist>
+<input type="submit" value="Go" />
+</form>
+</div>
+<script src="deck.js/jquery.min.js"></script>
+<script src="deck.js/d3.v2.js"></script>
+<script src="deck.js/jquery-ui.min.js"></script>
+<script src="deck.js/core/deck.core.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="deck.js/extensions/split/deck.split.js"></script>
+<script src="deck.js/extensions/animation/deck.animation.js"></script>
+<script src="deck.js/extensions/deck.js-notes/deck.notes.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/clone/deck.clone.js"></script>
+<script src="deck.js/extensions/svg/svg.min.js"></script>
+<script src="js/module-2.js"></script>
+<footer>
+<div class="flex-element deck-course">
+<p>&copy; 2016 DataStax. Use only with permission. &bull;
+<span class="course-title">Core Java: Driver Configuration</span></p>
+</div>
+<div class="flex-element deck-brand">
+<a href="http://academy.datastax.com" target="blank">DataStax Academy</a>
+</div>
+<div class="deck-progressbar">
+<span></span>
+</div>
+</footer>
+<script type="text/javascript">
+  //<![CDATA[
+    (function($, deck, undefined) {
+      $.deck.defaults.keys['previous'] = [8, 33, 37, 39];
+      $.deck.defaults.keys['next'] = [13, 32, 34, 39];
+    
+      $.extend(true, $[deck].defaults, {
+          countNested: false
+      });
+    
+      $.deck('.slide');
+      $.deck('disableScale');
+    })(jQuery, 'deck');
+  //]]>
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+    $(document).bind('deck.change', function(event, from, to) {
+      var width = to / ($.deck('getSlides').length - 1) * 100;
+      $('.deck-progressbar span').css('width', width + '%');
+    });
+  //]]>
+</script>
+</body>
+</html>

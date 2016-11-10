@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta content="text/html; charset=" http-equiv="Content-Type" />
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+<meta content="Asciidoctor 1.5.3" name="generator" />
+<title>Full Text Search and Secondary Indexes with Apache Solr&#8482;</title>
+<link href="deck.js/themes/style/font.css" rel="stylesheet" />
+<style>
+.conum { display: inline-block; color: white !important; background-color: #222222; -webkit-border-radius: 100px; border-radius: 100px; text-align: center; width: 1.2em; height: 1.2em; font-size: 0.9em; font-weight: bold; line-height: 1.2; font-family: Arial, sans-serif; font-style: normal; position: relative; top: -0.1em; }
+.conum * { color: white !important; }
+.conum + b { display: none; }
+.conum:after { content: attr(data-value); }
+.conum:not([data-value]):empty { display: none; }
+.colist table td:first-of-type { padding-right: 0.25em; }
+</style>
+<style>
+/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+/*pre.CodeRay {background-color:#f7f7f8;}*/
+.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
+.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
+table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
+table.CodeRay td{vertical-align: top;line-height:1.45}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
+table.CodeRay td.code{padding:0 0 0 .5em}
+table.CodeRay td.code>pre{padding:0}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
+<link href="deck.js/core/deck.core.css" rel="stylesheet" />
+<link href="deck.js/extensions/scale/deck.scale.css" media="screen" rel="stylesheet" />
+<link href="deck.js/extensions/goto/deck.goto.css" media="screen" rel="stylesheet" />
+<link href="deck.js/themes/style/datastax.css" media="screen" rel="stylesheet" />
+<link href="deck.js/themes/transition/fade.css" media="screen" rel="stylesheet" />
+<link href="deck.js/core/print.css" media="print" rel="stylesheet" />
+<script src="deck.js/modernizr.custom.js"></script>
+</head>
+<body class="article">
+<div class="deck-container">
+<section class="slide" id="title-slide">
+<h1>Full Text Search and Secondary Indexes with Apache Solr&#8482;</h1>
+</section>
+<section class="slide transition-blue" id="courses-DS420-components-sections-solr-intro">
+<h2>Full Search and Secondary Indexes with Solr&#8482;</h2>
+
+</section>
+<section class="slide" id="datastax-enterprise-search">
+<h2>DataStax Enterprise Search</h2>
+<div class="ulist">
+<ul>
+<li>Cassandra&#8482; Secondary Indexes</li>
+<li>Inverted Indexes</li>
+<li>Solr&#8482; Secondary Indexes</li>
+<li>Solr&#8482; Cores</li>
+<li>DSE Search</li>
+<li>Queries with Rest</li>
+<li>CQL queries with the solr_query predicate</li>
+<li>Standard Solr&#8482; predicates</li>
+</ul>
+</div>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li>Specifying a custom schema</li>
+<li>Solr&#8482; data types</li>
+<li>Analyzer stack</li>
+<li>Collections</li>
+<li>UDTs</li>
+<li>Facets</li>
+<li>Advanced predicates</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="why-use-secondary-or-solr-secondary-indexes">
+<h2>Why Use Secondary or Solr&#8482; Secondary Indexes</h2>
+<div class="ulist">
+<ul>
+<li>Cassandra&#8482; is a very low-latency data store</li>
+<li>Querying Cassandra&#8482; data is relatively inflexible</li>
+<li>Secondary indexes allow applications to perform queries on other columns</li>
+<li>Solr&#8482; offers a very flexible range of query predicates</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Querying Cassandra&#8482; data is relatively inflexible as an application must access data using the primary key</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="cassandra-secondary-indexes">
+<h2>Cassandra&#8482; Secondary Indexes</h2>
+<div class="ulist">
+<ul>
+<li>Can look up rows based on an exact match of a non partition key column</li>
+<li>Do not honor tokens ranges&#8201;&#8212;&#8201;<strong>causes a scatter/gather</strong></li>
+<li>Only index data which is local to a node</li>
+<li>Implemented as a column family</li>
+<li>Eventually consistent</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Scatter/gather may be heavy</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="keyword-searches-with-an-inverted-index">
+<h2>Keyword Searches with an Inverted Index</h2>
+<div class="ulist">
+<ul>
+<li><p>
+Secondary indexes increase query flexibility<div class="ulist">
+<ul>
+<li>Are not efficient in many cases</li>
+<li>Only support exact matches of the key column</li>
+</ul>
+</div></p></li>
+<li><p>
+A Roll-your-own inverted index may be a good solution<div class="ulist">
+<ul>
+<li>Table with primary key (Index Term, Row key), and optional values</li>
+<li>More flexible querying</li>
+<li>Hard to maintain updates and deletions</li>
+</ul>
+</div></p></li>
+<li><p>
+When inserting rows<div class="ulist">
+<ul>
+<li>Build the set of search terms</li>
+<li>Insert a row for each one</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="why-solr">
+<h2>Why Solr&#8482;?</h2>
+<div class="ulist">
+<ul>
+<li>Acidic searches</li>
+<li>Case sensitive searches</li>
+<li>GEO searches</li>
+<li>Rank searches</li>
+<li>Facets searches</li>
+<li>Fuzzy searches</li>
+<li>Wild-card searches</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="solr-secondary-indexes">
+<h2>Solr&#8482; Secondary Indexes</h2>
+<div class="ulist">
+<ul>
+<li>Solr&#8482; maintains a list of documents for each key</li>
+<li>Flexibility on extracting the keys from documents&#8201;&#8212;&#8201;each word can be a key</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img alt="secondaryIndex1" src="images/courses/DS420/components/sections/solr/intro/secondaryIndex1.png" />
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>Instead of maintaining a list of IDs</li>
+<li>It encodes IDs into a bit map, each bit represents a document</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img alt="secondaryIndex2" src="images/courses/DS420/components/sections/solr/intro/secondaryIndex2.png" />
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li>This allows for the fast computation of sophisticated predicates such as "and"</li>
+<li>Solr can do a bit-wise <strong>and</strong> and <strong>or</strong> operations on qualifying documents</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img alt="secondaryindex3" src="images/courses/DS420/components/sections/solr/intro/secondaryindex3.png" />
+</div>
+</div>
+</section>
+<section class="slide" id="dse-search-is-based-on-apache-solr">
+<h2>DSE Search is Based on Apache Solr&#8482;</h2>
+<div class="paragraph"><p><strong>Some Solr&#8482; Concepts</strong></p></div>
+<div class="ulist">
+<ul>
+<li>A Solr&#8482; Database is known as a "core"</li>
+<li><p>
+Created by uploading 2 files to Solr&#8482; - <em>solrconfig.xml</em> and <em>schema.xml</em> via a REST API<div class="ulist">
+<ul>
+<li><em>schema.xml</em> defines the fields in the core and declares the fields that make up the primary key</li>
+<li><em>solrconfig.xml</em> contains important information</li>
+</ul>
+</div></p></li>
+<li>Documents are inserted into the core by posting them to the REST API</li>
+<li>Solr stores the document in its backing-store and indexes the fields according to the <em>schema.xml</em> field definitions</li>
+<li>Searching the core is through the REST API</li>
+<li>Solr includes a web interface for queries and monitoring</li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>This slide talks about how vanilla Solr&#8482; works, and not necessarily how DSE Search works.</p></div>
+</div>
+</div>
+</section>
+<section class="slide" id="cassandra-vs-solr-terminology">
+<h2>Cassandra&#8482; vs. Solr&#8482; Terminology</h2>
+<div class="imageblock">
+<div class="content">
+<img alt="solrtermtable" src="images/courses/DS420/components/sections/solr/intro/solrtermtable.png" />
+</div>
+</div>
+</section>
+<section class="slide" id="datastax-enterprise-search-2">
+<h2>DataStax Enterprise Search</h2>
+<div class="ulist">
+<ul>
+<li>Cassandra&#8482; is the backing store for your data</li>
+<li>Solr&#8482; (Lucene&#8482;) indexes remain the same</li>
+<li>REST API is still available</li>
+<li>CQL Solr&#8482; extensions are the preferred way to query</li>
+<li>Benefit from driver load-balancing and API features</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="sql language-sql"><span class="class">SELECT</span> * <span class="keyword">FROM</span> videos <span class="keyword">WHERE</span> solr_query = <span class="string"><span class="delimiter">'</span><span class="content">mpaa_rating:PG</span><span class="delimiter">'</span></span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>CQL data is automatically indexed in Solr&#8482;</li>
+<li>Indexes data which is local to a node</li>
+<li>Automatic scatter-gather and de-duplication on query</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="datastax-enterprise-search-simplifies-solr">
+<h2>DataStax Enterprise Search Simplifies Solr&#8482;</h2>
+<div class="paragraph"><p><strong>dsetool simplifies creation and modification of cores over using the REST API</strong></p></div>
+<div class="ulist">
+<ul>
+<li><p>
+create_core&#8201;&#8212;&#8201;Creates a core<div class="ulist">
+<ul>
+<li>Optionally will generate <em>schema.xml</em> and <em>solrconfig.xml</em> for you</li>
+</ul>
+</div></p></li>
+<li>reload_core&#8201;&#8212;&#8201;Update the schema</li>
+<li>unload_core&#8201;&#8212;&#8201;Remove a core (leave the base table)</li>
+<li>get_core_config&#8201;&#8212;&#8201;Download config</li>
+<li>get_core_schema&#8201;&#8212;&#8201;Download schema</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="creating-your-first-core-with-dsetool">
+<h2>Creating Your First Core with dsetool</h2>
+<div class="ulist">
+<ul>
+<li><strong>dsetool</strong> will automatically generate resources and create the core</li>
+<li>Core is automatically created and DataStax Enterprise chooses field types for you</li>
+<li>Core name in DataStax Enterprise is always of the form <strong>&lt;keyspace&gt;.&lt;table&gt;</strong></li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>dsetool create_core &lt;keyspace&gt;.&lt;table&gt; generateResources=true reindex=true</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="viewing-your-core-in-the-ui">
+<h2>Viewing Your Core in the UI</h2>
+<div class="ulist">
+<ul>
+<li>Visit the URL <a class="bare" href="http://&lt;any">http://&lt;any</a> node IP address&gt;:8983/solr</li>
+<li>Choose the core under <strong>Core Selector</strong></li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img alt="solrpanel" src="images/courses/DS420/components/sections/solr/intro/solrpanel.png" />
+</div>
+</div>
+</section>
+<section class="slide" id="basic-queries-using-rest">
+<h2>Basic Queries Using REST</h2>
+<div class="ulist">
+<ul>
+<li>You can query Solr&#8482; with the following URL:</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>http://&lt;node IP address&gt;:8983/solr/&lt;keyspace.table&gt;/select?</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li><p>
+Some simple parameters:<div class="ulist">
+<ul>
+<li>q=&lt;Solr predicate&gt;  (required)</li>
+<li>fl=&lt;fields to return&gt;</li>
+<li>rows=&lt;number of rows to return (default 10)&gt;</li>
+<li>start=&lt;which row to start (for paging)&gt;</li>
+<li>wt=&lt;writer type (xml, json, etc)&gt;</li>
+<li>fq=&lt;filter query (explained later)</li>
+<li>sort=&lt;sort fields&gt; asc | desc</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="example-query-using-curl">
+<h2>Example Query Using curl</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>curl http://localhost:8983/solr/killrvideo.videos/select?q=title:Once</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>XML by default (add &amp;wt=json for JSON):</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;response&gt;
+  &lt;lst name="responseHeader"&gt;
+    &lt;int name="status"&gt;0&lt;/int&gt;
+    &lt;int name="QTime"&gt;98&lt;/int&gt;
+  &lt;/lst&gt;
+  &lt;result name="response" numFound="9" start="0"&gt;
+    &lt;doc&gt;
+      &lt;str name="video_id"&gt;cb1f7011-6333-11e6-99be-a45e60eb67c5&lt;/str&gt;
+      &lt;int name="release_year"&gt;2007&lt;/int&gt;
+      &lt;str name="description"&gt;
+        A vacuum repairman moonlights as a street musician and hopes for his big break. One day a Czech immigrant, who earns a living selling flowers, approaches him with the news that she is also an aspiring singer-songwriter. The pair decide to collaborate, and the songs that they compose reflect the story of their blossoming love.
+      &lt;/str&gt;
+      &lt;str name="title"&gt;Once&lt;/str&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="the-web-ui-query-page">
+<h2>The Web UI Query Page</h2>
+<div class="ulist">
+<ul>
+<li>Select your core and choose the <strong>Query</strong> tab</li>
+<li>Add your predicates to the form</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img alt="queryUIpage" src="images/courses/DS420/components/sections/solr/intro/queryUIpage.png" />
+</div>
+</div>
+</section>
+<section class="slide" id="common-query-predicates-standard-parser">
+<h2>Common Query Predicates (Standard Parser)</h2>
+<div class="ulist">
+<ul>
+<li>Predicates are of the form <strong>&lt;field&gt;:&lt;term&gt;</strong></li>
+<li>If a default search field has been defined, <strong>&lt;field&gt;</strong> may be omitted</li>
+<li><p>
+Terms:<div class="ulist">
+<ul>
+<li>*&#8201;&#8212;&#8201;wildcard  eg. foo* (can even wildcard the field)</li>
+<li>[value TO value] Range</li>
+<li>term AND term</li>
+<li>term OR term</li>
+<li>term NOT term</li>
+<li>"term" &#8201;&#8212;&#8201;exact match of term</li>
+<li>(term1 term2)&#8201;&#8212;&#8201;contains both</li>
+<li>"term1 term2"~&lt;num&gt;  term 1 is within &lt;num&gt; chars of term2</li>
+<li>term^&lt;num&gt;&#8201;&#8212;&#8201;boost a term&#8217;s relevance</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide transition-azure" id="courses-DS420-components-exercises-solr-create-solr-core">
+<h2>Exercise: Create a Search core</h2>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+<span class="maroon">Create</span><div class="ulist">
+<ul>
+<li>Create the table <code>videos</code></li>
+<li>Create a core using <strong>dsetool</strong> for the table</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="red">Code</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="green">Test</span><div class="ulist">
+<ul>
+<li>Use the the web UI to explore your core</li>
+<li><p>
+From the Query tab, answer the following queries:<div class="ulist">
+<ul>
+<li>What year was the movie <strong>Love Actually</strong> released?</li>
+<li>What movies take place in the <strong>Hundred Acre Wood</strong>?</li>
+<li>What movies have an average rating greater than 9?</li>
+<li>What rated G movies have the tag <strong>toy</strong>?</li>
+<li>How many movies are there in each genre? (Extra Credit)</li>
+</ul>
+</div></p></li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="purple">Run</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="openblock notes">
+<div class="content">
+
+</div>
+</div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-solr-cql">
+<h2>Using Solr&#8482; with CQL</h2>
+<div class="ulist">
+<ul>
+<li>CQL adds a special <strong>solr_query</strong> predicate</li>
+<li>Automatically limited to 10 rows unless you use a <em>LIMIT</em> clause</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="sql language-sql"><span class="class">SELECT</span> * <span class="keyword">FROM</span> <span class="type">table</span> <span class="keyword">WHERE</span> solr_query = &lt;query&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li><p>
+Two forms for &lt;query&gt;<div class="ulist">
+<ul>
+<li>Whatever you can put for <code>q =</code></li>
+<li>JSON string which allows additional options</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="sql language-sql"><span class="class">SELECT</span> * <span class="keyword">FROM</span> <span class="type">table</span> <span class="keyword">WHERE</span> solr_query =
+<span class="string"><span class="delimiter">'</span><span class="content">{&quot;q&quot;:&quot;&lt;q predicate&gt;&quot;,&quot;fq&quot;:&quot;&lt;filter predicate&quot;, &quot;sort&quot;: ... }</span><span class="delimiter">'</span></span></code></pre>
+</div>
+</div>
+</section>
+<section class="slide transition-azure" id="courses-DS420-components-exercises-solr-using-solr-cqlsh">
+<h2>Exercise: Using CQL</h2>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+<span class="maroon">Create</span><div class="ulist">
+<ul>
+<li>Create a core using <strong>dsetool</strong> for the table</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="red">Code</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="green">Test</span><div class="ulist">
+<ul>
+<li>Use <strong>cqlsh</strong> to run the following queries using:</li>
+<li><p>
+Using form 1 of the <code>solr_query</code> predicate:<div class="ulist">
+<ul>
+<li>Retrieve the average rating for the movie <strong>Enter The Dragon</strong></li>
+</ul>
+</div></p></li>
+<li><p>
+Using form 2 of the <code>solr_query</code> predicate:<div class="ulist">
+<ul>
+<li>List the title of all movies in the <em>Animation</em> genre.</li>
+<li>Repeat the previous query, but sort them by the release date in ascending order.</li>
+</ul>
+</div></p></li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="purple">Run</span><div class="ulist">
+<ul>
+<li><strong>cqlsh</strong></li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="paragraph notes"><p>In Session 6</p></div>
+</section>
+<section class="slide transition-azure" id="courses-DS420-components-exercises-solr-implement-solr-search">
+<h2>Exercise: Implement Search</h2>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+<span class="maroon">Create</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="red">Code</span><div class="ulist">
+<ul>
+<li>In the class CassandraVideoDAO</li>
+<li><p>
+Implement the method search<div class="ulist">
+<ul>
+<li>It takes a Solr predicate and the number of rows to return</li>
+</ul>
+</div></p></li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="green">Test</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="purple">Run</span><div class="ulist">
+<ul>
+<li>N/A
+In Session 6</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-solr-schema">
+<h2>Modifying the Schema</h2>
+<div class="ulist">
+<ul>
+<li>Download the schema with <strong>dsetool get_core_schema</strong></li>
+<li>Modify the downloaded schema file</li>
+<li>Reload the core with the new schema using <strong>dsetool reload_core</strong></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="schema-xml">
+<h2>Schema XML</h2>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;fields&gt;
+&lt;field indexed="true" multiValued="false" name="title" type="TextField"/&gt;
+&lt;field indexed="true" multiValued="false" name="mpaa_rating" type="StrField"/&gt;
+&lt;/fields&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>Each field has a name, type, and if it&#8217;s multi-valued (for collections)</li>
+<li>Types are also defined in the schema.xml</li>
+<li>You must specify a unique key</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;uniqueKey&gt;title&lt;/uniqueKey&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>Or&#8201;&#8212;&#8201;multi-part key</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;uniqueKey&gt;(title, release_year, video_id)&lt;/uniqueKey&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>Optional default search field</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;defaultSearchField&gt;title&lt;/defaultSearchField&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="datatypes">
+<h2>DataTypes</h2>
+<div class="ulist">
+<ul>
+<li>Types are defined in <em>schema.xml</em></li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;fieldType class="org.apache.solr.schema.StrField" name="StrField"/&gt;
+&lt;fieldType class="org.apache.solr.schema.TrieIntField" name="TrieIntField"/&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>StrField means the whole field value verbatim becomes a term</li>
+<li>TextField may split the string into multiple terms</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="datatypes-text-fields">
+<h2>DataTypes&#8201;&#8212;&#8201;Text Fields</h2>
+<div class="ulist">
+<ul>
+<li>TextFields are tokenized into several terms using a TokenizerFactory and the terms are further modified by filters</li>
+<li>eg. This field type is tokenized and then lowercased:</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;fieldType class="org.apache.solr.schema.TextField" name="TextField"&gt;
+	&lt;analyzer&gt;
+		&lt;tokenizer class="solr.StandardTokenizerFactory"/&gt;
+		&lt;filter class="solr.LowerCaseFilterFactory"/&gt;
+	&lt;/analyzer&gt;
+&lt;/fieldType&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="text-fields-other-tokenizers">
+<h2>Text Fields&#8201;&#8212;&#8201;Other Tokenizers</h2>
+<div class="ulist">
+<ul>
+<li>Each tokenizer has a unique way of splitting the text data into search terms</li>
+<li><p>
+Some examples:<div class="ulist">
+<ul>
+<li>StandardTokenizerFactory&#8201;&#8212;&#8201;Split on whitespace and some punctuation</li>
+<li>KeywordTokenizerFactory&#8201;&#8212;&#8201;The whole text field is a single search term</li>
+<li>NGramTokenizerFactory&#8201;&#8212;&#8201;Generate N-grams for a size range</li>
+</ul>
+</div></p></li>
+<li>Different tokenizers can result in vastly different numbers of search terms for a given string.  This greatly affects the index size.</li>
+<li><p>
+Full details can be found here:<div class="ulist">
+<ul>
+<li><a class="bare" href="https://cwiki.apache.org/confluence/display/solr/Tokenizers">https://cwiki.apache.org/confluence/display/solr/Tokenizers</a></li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="text-fields-other-filters">
+<h2>Text Fields&#8201;&#8212;&#8201;Other Filters</h2>
+<div class="ulist">
+<ul>
+<li><p>
+In addition to tokenizers, a text field has a set of filters to further modify the search terms<div class="ulist">
+<ul>
+<li>LowerCaseFilterFactory&#8201;&#8212;&#8201;Lowercase the terms</li>
+<li>BeiderMorseFilterFactory&#8201;&#8212;&#8201;Allow matching of similar sounding names</li>
+<li>PorterStemFilterFactory&#8201;&#8212;&#8201;Reduce words to their stems (remove suffixes)</li>
+<li>StopWordFilterFactory&#8201;&#8212;&#8201;Remove stop words from a specified list</li>
+<li>And many more&#8230;&#8203;</li>
+</ul>
+</div></p></li>
+<li>Stack as many filters as necessary</li>
+<li>Validate the analyzers using the Solr UI</li>
+</ul>
+</div>
+</section>
+<section class="slide" id="filters-that-require-extra-files">
+<h2>Filters That Require Extra Files</h2>
+<div class="ulist">
+<ul>
+<li>Some filters such as the <em>StopWordFilterFactory</em> require an extra file containing the list of stop-words</li>
+<li>Upload the file to the core using the <strong>dsetool</strong></li>
+<li>eg. Upload the local file <em>stopwords.txt</em> to the core resource file <em>stopwords.txt</em></li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>dsetool write_resource killrvideo.videos name=stopwords.txt file=stopwords.txt</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>Link the core file to the filter in the filter declaration:</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;filter class="solr.CommonGramsFilterFactory" words="stopwords.txt" ignoreCase="true"/&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="analysis-ui">
+<h2>Analysis UI</h2>
+<div class="imageblock">
+<div class="content">
+<img alt="analysisUI" src="images/courses/DS420/components/sections/solr/schema/analysisUI.png" />
+</div>
+</div>
+</section>
+<section class="slide" id="datatypes-numerics">
+<h2>DataTypes&#8201;&#8212;&#8201;Numerics</h2>
+<div class="ulist">
+<ul>
+<li>There are several ways in Solr&#8482; to represent numeric types. The most common is the "Trie" field type</li>
+<li>Trie types are stored as prefix-trees</li>
+<li><p>
+TrieField and family of "Trie" types are more efficient, and allow ordering<div class="ulist">
+<ul>
+<li>TrieInt</li>
+<li>TrieFloat</li>
+<li>TrieDouble</li>
+<li>TrieDate</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+</section>
+<section class="slide" id="copy-fields">
+<h2>Copy Fields</h2>
+<div class="ulist">
+<ul>
+<li><p>
+Sometimes it&#8217;s necessary to have the same field analyzed by more than one analyzer stack<div class="ulist">
+<ul>
+<li>Create a new field with the desired type in the <em>schema.xml</em></li>
+<li>Add a <strong>copyField</strong> tag to populate the new field</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;copyField source="title" dest="title2"/&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="doc-values">
+<h2>Doc Values</h2>
+<div class="ulist">
+<ul>
+<li><p>
+An inverted index is very efficient for search, however, for operations such as sorting and faceting Solr needs to do lookups on every sort key or facet.<div class="ulist">
+<ul>
+<li>Causes heap pressure</li>
+</ul>
+</div></p></li>
+<li>Setting <code>docValues=true</code> on a field allows Search to store a list of terms for each document.</li>
+<li>Use this for facet fields or search fields</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;field name="genres_facet" type="string" indexed="false" stored="false" docValues="true" /&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide transition-azure" id="courses-DS420-components-exercises-solr-schema">
+<h2>Exercise: Modify Schema</h2>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+<span class="maroon">Create</span><div class="ulist">
+<ul>
+<li>Modify the Search schema of the <strong>videos</strong> table to support sorting results by title alphabetically.  Do not modify the <code>title</code> field itself.</li>
+<li>Enable features to optimize the sort</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="red">Code</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="green">Test</span><div class="ulist">
+<ul>
+<li>Test your results with the &#8230;&#8203; test</li>
+<li>Modify the Search schema to use the StrField type where it&#8217;s appropriate</li>
+<li>Be sure to use <code>dsetool reload_core</code> to apply your changes</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="purple">Run</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="paragraph notes"><p>In Session 6</p></div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-solr-facet">
+<h2>Facets</h2>
+<div class="ulist">
+<ul>
+<li>Facets are essentially equivalent to a <em>count(*)</em> group by in SQL</li>
+<li><p>
+Faceting generates the counts for each distinct facet values in the specified columns<div class="ulist">
+<ul>
+<li>eg.  Find all products with USB in the title, facet by Category</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img alt="facets" src="images/courses/DS420/components/sections/solr/facet/facets.png" />
+</div>
+</div>
+</section>
+<section class="slide" id="facets-with-cql">
+<h2>Facets with CQL</h2>
+<div class="ulist">
+<ul>
+<li>Add a facet element to the JSON query, with a dictionary containing the facet parameters including a field or list of fields</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="json language-json">{ <span class="key"><span class="delimiter">&quot;</span><span class="content">q</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;query&gt;</span><span class="delimiter">&quot;</span></span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">facet</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">field</span><span class="delimiter">&quot;</span></span>: [ <span class="string"><span class="delimiter">&quot;</span><span class="content">category</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">supplier</span><span class="delimiter">&quot;</span></span> ] }, <span class="key"><span class="delimiter">&quot;</span><span class="content">mincount</span><span class="delimiter">&quot;</span></span>: <span class="integer">1</span> }</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>The <strong>facet.mincount</strong> parameter above eliminates facets that contain 0 documents</li>
+<li>The query returns a single row / column that contains the facet results encoded in JSON</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>{"category_name":{"USB cables":34,"mobile device chargers":26,"HDD/SSD enclosures":12,"interface cards/adapters":6,"interface hubs":6,"MP3/MP4 players":5,"networking cards":4,"USB flash drives":3,"cable interface/gender adapters":3,"external hard drives":3,"keyboards":3,"tape drives":3,"KVM cables":2,"KVM switches":2,"internal hard …</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="facet-queries">
+<h2>Facet Queries</h2>
+<div class="ulist">
+<ul>
+<li>When faceting on non-discrete values such as price, break the value down into ranges using facet queries</li>
+<li><p>
+Supply a list of queries to the <strong>facet.query</strong> parameter:<div class="ulist">
+<ul>
+<li>eg. Companies with negative income or positive income</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="json language-json">{ <span class="key"><span class="delimiter">&quot;</span><span class="content">q</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">form:10-K</span><span class="delimiter">&quot;</span></span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">facet</span><span class="delimiter">&quot;</span></span>: { <span class="key"><span class="delimiter">&quot;</span><span class="content">query</span><span class="delimiter">&quot;</span></span>: [ <span class="string"><span class="delimiter">&quot;</span><span class="content">fin_NetIncomeLoss:[* TO 0]</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">fin_NetIncomeLoss:[0 TO *]</span><span class="delimiter">&quot;</span></span> ], <span class="key"><span class="delimiter">&quot;</span><span class="content">mincount</span><span class="delimiter">&quot;</span></span>: <span class="integer">1</span> } }</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="title"><em>Result</em></div>
+<div class="content">
+<pre class="CodeRay"><code>{"fin_NetIncomeLoss:[* TO 0]":60,"fin_NetIncomeLoss:[0 TO *]":635}</code></pre>
+</div>
+</div>
+</section>
+<section class="slide transition-azure" id="courses-DS420-components-exercises-solr-facet-search">
+<h2>Exercise: Facet search</h2>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+<span class="maroon">Create</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="red">Code</span><div class="ulist">
+<ul>
+<li><p>
+In the Class CassandraVideoSearchDAO implement the <em>searchFacet</em> method<div class="ulist">
+<ul>
+<li>This method takes a long-form <code>solr_query</code> parameter</li>
+</ul>
+</div></p></li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="green">Test</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="purple">Run</span><div class="ulist">
+<ul>
+<li>Start the application in debug mode and try searching and filtering results by facet</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="paragraph notes"><p>In Session 6</p></div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-solr-collection">
+<h2>Collections - Lists and Sets</h2>
+<div class="ulist">
+<ul>
+<li>Lists and Sets are mapped as multi-valued fields</li>
+<li>Field type should match the type for the values within the collection</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>&lt;field indexed="true" multiValued="true" name="tags" stored="true" type="TextField"/&gt;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="collections-maps">
+<h2>Collections - Maps</h2>
+<div class="ulist">
+<ul>
+<li>Map must be defined as a dynamic field in the schema</li>
+<li><p>
+Keys are mapped as separate fields<div class="ulist">
+<ul>
+<li>Can potentially have thousands of fields</li>
+<li>Best used when there are a small number of distinct map keys across all rows</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Querying the dynamic field</strong></p></div>
+<div class="ulist">
+<ul>
+<li>The Map field must use a wildcard <strong>*</strong> as a part of its name</li>
+<li>The key&#8217;s name replaces the wildcard in the dynamic field&#8217;s name</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title"><em>Data</em></div>
+<div class="content">
+<pre class="CodeRay"><code>|     title | metadata
+------------+----------------------------------------------------------
+ Home Alone | {'encoding': '1080p', 'height': '1080', 'width': '1920'}</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="title"><em>Schema</em></div>
+<div class="content">
+<pre class="CodeRay"><code>&lt;dynamicField indexed="true" multiValued="false" name="metadata_*" stored="true" type="TextField"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="title"><em>Query</em></div>
+<div class="content">
+<pre class="CodeRay"><code>SELECT * FROM videos WHERE solr_query = 'metadata_encoding:1080p';</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="tuples-and-user-defined-types">
+<h2>Tuples and User-Defined Types</h2>
+<div class="ulist">
+<ul>
+<li>Tuples and UDTs are indexed as separate documents</li>
+<li><p>
+When querying, DSE automatically maps the documents together<div class="ulist">
+<ul>
+<li>From the parent document&#8201;&#8212;&#8201;the CQL row</li>
+<li>To the child document&#8201;&#8212;&#8201;tuple or UDT</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>CREATE TYPE metadata (encoding TEXT, height INT, width INT);
+
+CREATE TABLE ...
+   duration TUPLE&lt;INT,INT,INT,INT&gt;,
+   video_metadata FROZEN&lt;metadata&gt;,
+...</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>These columns are just used to illustrate UDTs and tuples, and the context of the column within the schema does not need to be discussed in great detail.</p></div>
+<div class="paragraph"><p>Why use UDT for video metadata when we had it defined with a Map before? One of the advantages is to allow for mixed types; it didn&#8217;t make much sense to have the height and width attributes as TEXT previously.</p></div>
+<div class="paragraph"><p>For duration, you can think of the this as the length of a video in hours, minutes, seconds, and milliseconds.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li>The column uses the field type <strong>com.datastax.bdp.search.solr.core.types.TupleField</strong></li>
+<li><p>
+Each field within a tuple or UDT is also declared in the schema<div class="ulist">
+<ul>
+<li>Tuple / UDT fields are referenced using dot notation&#8201;&#8212;&#8201;<strong>column_name.field_name</strong></li>
+<li>UDTs uses the type field name</li>
+<li>Tuples uses static names&#8201;&#8212;&#8201;<strong>field1</strong>, <strong>field2</strong>, etc.</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Examples</strong></p></div>
+<div class="listingblock">
+<div class="title"><em>UDT</em></div>
+<div class="content">
+<pre class="CodeRay"><code>...
+&lt;field indexed="true" multiValued="false" name="video_metadata" stored="true" type="TupleField"/&gt;
+&lt;field indexed="true" multiValued="false" name="video_metadata.encoding" stored="true" type="TextField"/&gt;
+&lt;field indexed="true" multiValued="false" name="video_metadata.height" stored="true" type="TrieIntField"/&gt;
+&lt;field indexed="true" multiValued="false" name="video_metadata.width" stored="true" type="TrieIntField"/&gt;
+...</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="title"><em>Tuple</em></div>
+<div class="content">
+<pre class="CodeRay"><code>&lt;field indexed="true" multiValued="false" name="duration" stored="true" type="TupleField"/&gt;
+&lt;field indexed="true" multiValued="false" name="duration.field1" stored="true" type="TrieIntField"/&gt;
+&lt;field indexed="true" multiValued="false" name="duration.field2" stored="true" type="TrieIntField"/&gt;
+&lt;field indexed="true" multiValued="false" name="duration.field3" stored="true" type="TrieIntField"/&gt;
+&lt;field indexed="true" multiValued="false" name="duration.field4" stored="true" type="TrieIntField"/&gt;</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Searching nested UDTs or tuples are the same, just continue to use the dot notation:
+   tuple_name.field1.field2</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li>Searching a tuple / UDT requires the <strong>{!tuple}</strong> query parser preceding the search expression</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title"><em>Data</em></div>
+<div class="content">
+<pre class="CodeRay"><code>|     title | video_metadata
+------------+------------------------------------------------
+ Home Alone | {encoding: '1080p', height: 1080, width: 1920}</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="title"><em>Query</em></div>
+<div class="content">
+<pre class="CodeRay"><code>SELECT * FROM videos WHERE solr_query = '{!tuple}video_metadata.width:1920';</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>If using the JSON form for the CQL query, the tuple query parser is added in the <code>q</code> parameter.</p></div>
+</div>
+</div>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li>Searching for multiple conditions in a single tuple or UDT</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>SELECT * FROM videos WHERE solr_query = '{!tuple}video_metadata.height:1080 AND metadata.width:1920';</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="ulist">
+<ul>
+<li>Searching across multiple UDTs or tuples</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>SELECT * FROM videos WHERE solr_query = '({!tuple}a.height:6 AND {!tuple}b.height:6)';</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+When searching across multiple UDTs / tuples, the parentheses used for grouping and the removal of whitespace between the <strong>{!tuple}</strong> and search condition is required!
+</td>
+</tr>
+</table>
+</div>
+</section>
+<section class="slide transition-azure" id="courses-DS420-components-exercises-solr-collection-search">
+<h2>Exercise: Collection Search</h2>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+<span class="maroon">Create</span><div class="ulist">
+<ul>
+<li>Edit a schema for the table <code>actors</code></li>
+<li>For the <strong>videos</strong> field, make sure that it indexes all values within the Set</li>
+<li>For the <strong>actors</strong> field, generate dynamic fields on all keys which start with appearances_</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="red">Code</span><div class="ulist">
+<ul>
+<li>Write a CQL query that finds actors in certain movies, identified by UUID</li>
+<li>Write a CQL query to find all actors who&#8217;ve had 6 appearances in 2015</li>
+<li>Write a CQL query that finds all actors that had at least one movie appearance in 2000.</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="green">Test</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="purple">Run</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="paragraph notes"><p>In Session 6</p></div>
+</section>
+<section class="slide" id="courses-DS420-components-sections-solr-advanced">
+<h2>Joining Cores In Search</h2>
+<div class="ulist">
+<ul>
+<li>Can search in multiple cores using a join predicate&#8201;&#8212;&#8201;<strong>{!join</strong></li>
+<li>Joined cores must share the same keyspace and partition key</li>
+<li><p>
+Simplified syntax<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="script language-script">{!join fromIndex=&lt;ks.table&gt;}&lt;predicate&gt;</code></pre>
+</div>
+</div></p></li>
+</ul>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="sql language-sql"><span class="class">SELECT</span> title, release_year <span class="keyword">FROM</span> killrvideo.videos
+<span class="keyword">WHERE</span> solr_query = <span class="string"><span class="delimiter">'</span><span class="content">{!join fromIndex=killrvideo.actors_by_video}actor_name:&quot;Leonardo DiCaprio&quot;</span><span class="delimiter">'</span></span>;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+Joins will search the indexes in other cores but does not return its data
+</td>
+</tr>
+</table>
+</div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Joins using filter queries</strong></p></div>
+<div class="ulist">
+<ul>
+<li>Join predicate can be used either in the <strong>q</strong> or <strong>fq</strong> parameter</li>
+<li>Can have multiple <strong>fq</strong> parameters</li>
+<li>Useful with multiple search conditions in different cores</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code class="sql language-sql"><span class="class">SELECT</span> title,release_year <span class="keyword">FROM</span> killrvideo.videos
+<span class="keyword">WHERE</span> solr_query = <span class="string"><span class="delimiter">'</span><span class="content">{&quot;q&quot;: &quot;genres:Romance&quot;,
+            &quot;fq&quot;: &quot;{!join fromIndex=killrvideo.actors_by_video}actor_name:</span><span class="char">\&quot;</span><span class="content">Leonardo DiCaprio</span><span class="char">\&quot;</span><span class="content">&quot;}</span><span class="delimiter">'</span></span>;</code></pre>
+</div>
+</div>
+</section>
+<section class="slide" id="function-queries">
+<h2>Function Queries</h2>
+<div class="ulist">
+<ul>
+<li>Query on a function expression of the fields</li>
+<li><p>
+Can be used in <strong>q</strong>, <strong>fq</strong>, and <strong>sort</strong> parameters<div class="ulist">
+<ul>
+<li>Requires the <strong>{!func}</strong> or <strong>{!frange}</strong></li>
+<li><strong>{!frange l=&lt;lower&gt; u=&lt;upper&gt;}&lt;function&gt;</strong> predicates on a range of values on the function</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div style="page-break-after: always"></div>
+<div class="listingblock">
+<div class="title"><em>Returns the rows where the average rating is between 7 and 9</em></div>
+<div class="content">
+<pre class="CodeRay"><code>SELECT * FROM video_ratings
+WHERE solr_query = '{"q": "{!frange l=7 u=9} div (sum_ratings, num_ratings)"}';</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="title"><em>Performs the function query on rows with 20 or more ratings</em></div>
+<div class="content">
+<pre class="CodeRay"><code>SELECT * FROM video_ratings
+WHERE solr_query = '{"q": "{!func} div (sum_ratings, num_ratings)", "fq": "{!frange l=20}num_ratings"}';</code></pre>
+</div>
+</div>
+<div class="paragraph"><p><br /></p></div>
+<div class="listingblock">
+<div class="title"><em>Sorting with query function</em></div>
+<div class="content">
+<pre class="CodeRay"><code>SELECT * FROM video_ratings
+WHERE solr_query = '{"q": "*:*", "sort": "div(sum_ratings,num_ratings) ASC"}';</code></pre>
+</div>
+</div>
+<div class="paragraph notes"><p>Currently there is no way to return the results of function queries via CQL. Please use the HTTP API for this; you can the function query to the <strong>fl</strong> parameter as one of fields to return [DSP-7335].</p></div>
+<div style="page-break-after: always"></div>
+<div class="paragraph"><p><strong>Other function queries</strong></p></div>
+<table class="tableblock frame-all grid-all" style="width:100%">
+<colgroup>
+<col style="width:14%" />
+<col style="width:57%" />
+<col style="width:28%" />
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Function</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">abs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Absolute value of a value or function</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">abs(fieldName)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">div</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Divide one value or function by another</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">div(field1, field2)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Distance between two vectors</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dist(2, x, y, 0, 0)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">docfreq</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of documents that contain the specified value in the field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">docfreq(fieldName, 'value')</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns value in a field, or min / max value in multi-valued field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">field(multiValuedField, min)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">idf</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">inverse document frequency for a term in a field</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">idf(fieldName, 'value')</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">max</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum numeric value across fields or constants</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">max(field1, field2, 0)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">min</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum numeric value across fields or constants</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">min(field1, field2, 0)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sqrt</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Square root of specified value or function</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sqrt(fieldName)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+The complete list of functions can be found on the Apache Solr&#8482; Reference Guide.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph notes"><p><a class="bare" href="https://cwiki.apache.org/confluence/display/solr/Function+Queries">https://cwiki.apache.org/confluence/display/solr/Function+Queries</a></p></div>
+</section>
+<section class="slide" id="edismax-query-parser">
+<h2>eDisMax Query Parser</h2>
+<div class="ulist">
+<ul>
+<li>The Standard (Lucene) query parser offers a rich set of predicates</li>
+<li><p>
+eDisMax (Extended DisMax) offers much, much more:<div class="ulist">
+<ul>
+<li>Avoids returning an error message as much as possible</li>
+<li>Customizable score boosting for queries and fields</li>
+<li>Can be enabled in a query or configured as the default parser for a core</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="icon-note" title="Note"></i>
+</td>
+<td class="content">
+Requires the defaultSearchField to be set in the core schema
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay"><code>SELECT * FROM videos WHERE solr_query = '{!edismax}genres:Comedy and tags:football';</code></pre>
+</div>
+</div>
+<div class="openblock notes">
+<div class="content">
+<div class="paragraph"><p>Ever had problems with using the standard query parser where you didn&#8217;t capitalize your Boolean ANDs and ORs? Ever forget a double-quote or parenthesis? With eDisMax, incorrect syntax will be handled in the best way possible so that the query runs and doesn&#8217;t return an error.</p></div>
+</div>
+</div>
+</section>
+<section class="slide transition-azure" id="courses-DS420-components-exercises-solr-advanced-query">
+<h2>Exercise: Advanced Query</h2>
+<div style="page-break-after: always"></div>
+<div class="ulist">
+<ul>
+<li><p>
+<span class="maroon">Create</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="red">Code</span><div class="ulist">
+<ul>
+<li>Write a CQL query to list the movies that have a character named John Smith that was released after the year 2000</li>
+<li>Write a CQL query to list the name of characters played by Vin Diesel in movies that have an average rating greater than 6</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="green">Test</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+<li><p>
+<span class="purple">Run</span><div class="ulist">
+<ul>
+<li>N/A</li>
+</ul>
+</div></p></li>
+</ul>
+</div>
+<div class="paragraph notes"><p>In Session 6</p></div>
+</section>
+<div aria-role="navigation">
+<a class="deck-prev-link" href="#" title="Previous">
+<i class="icon-chevron-with-circle-left"></i>
+</a>
+<a class="deck-next-link" href="#" title="Next">
+<i class="icon-chevron-with-circle-right"></i>
+</a>
+</div>
+<form action="." class="goto-form" method="get">
+<label for="goto-slide">Go to Slide:</label>
+<input id="goto-slide" list="goto-datalist" name="slidenum" type="text" />
+<datalist id="goto-data-list"></datalist>
+<input type="submit" value="Go" />
+</form>
+</div>
+<script src="deck.js/jquery.min.js"></script>
+<script src="deck.js/d3.v2.js"></script>
+<script src="deck.js/jquery-ui.min.js"></script>
+<script src="deck.js/core/deck.core.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="deck.js/extensions/split/deck.split.js"></script>
+<script src="deck.js/extensions/animation/deck.animation.js"></script>
+<script src="deck.js/extensions/deck.js-notes/deck.notes.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/clone/deck.clone.js"></script>
+<script src="deck.js/extensions/svg/svg.min.js"></script>
+<script src="js/module-7.js"></script>
+<footer>
+<div class="flex-element deck-course">
+<p>&copy; 2016 DataStax. Use only with permission. &bull;
+<span class="course-title">Full Text Search and Secondary Indexes with Apache Solr&#8482;</span></p>
+</div>
+<div class="flex-element deck-brand">
+<a href="http://academy.datastax.com" target="blank">DataStax Academy</a>
+</div>
+<div class="deck-progressbar">
+<span></span>
+</div>
+</footer>
+<script type="text/javascript">
+  //<![CDATA[
+    (function($, deck, undefined) {
+      $.deck.defaults.keys['previous'] = [8, 33, 37, 39];
+      $.deck.defaults.keys['next'] = [13, 32, 34, 39];
+    
+      $.extend(true, $[deck].defaults, {
+          countNested: false
+      });
+    
+      $.deck('.slide');
+      $.deck('disableScale');
+    })(jQuery, 'deck');
+  //]]>
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+    $(document).bind('deck.change', function(event, from, to) {
+      var width = to / ($.deck('getSlides').length - 1) * 100;
+      $('.deck-progressbar span').css('width', width + '%');
+    });
+  //]]>
+</script>
+</body>
+</html>
